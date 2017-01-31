@@ -5,6 +5,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
@@ -23,7 +24,7 @@ public class NoiseCapture {
 
     // check for level
     String levelToShow;
-    Logger logger = new Logger();
+    Logger logger;
     // Running Leq
     double linearFftAGlobalRunning = 0;
     private long fftCount = 0;
@@ -109,7 +110,7 @@ public class NoiseCapture {
             weightedA[i] = weightFormula;
         }
     }
-    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog) {
+    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog, final String timestampStr) {
 
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -525,7 +526,7 @@ public class NoiseCapture {
                                 @Override
                                 public void run() {
                                     Log.v("NOISE", String.valueOf(dbATimeDisplay));
-                                    //Logger logger = new Logger();
+                                    logger = new Logger(timestampStr);
                                     logger.addRecordToLog(dbATimeDisplay);
 
                                 }

@@ -104,12 +104,13 @@ public class Extras extends Fragment {
     private int cbmpbrk=0, cbmpwobrk=0, cpothole=0,cimmd=0,cslow=0,cutrn=0,cltrn=0,crtrn=0,cjup=0,cjdown=0, cnrml=0, crgh=0;
     private String bumpbrkStr="Bump with Brake" ,bumpwobrkStr="Bump w/o Brake",potholeStr="PothHole",immdStr="Immediate Brake",slowStr="Slow Brake", uStr="U Turn", lStr="Turn", jupStr="Jerk Up", jdownStr="Jerk Down",nrmlStr="Normal Road",rghStr="Rough Road",bsyStr="Busy Road";
 
-    private String marker="", subFolderName;
+    private String marker="";
+    public static String subFolderName;
     private Map<String, Integer> landmark =new HashMap<String,Integer>();
 
     private String appFolderName="GPSAndSensorRecorder";
     public static File folder,subfolder;
-    private Timestamp timestamp;
+    private static Timestamp timestamp;
 
     private String timestampStr;
     private Date accStartTime,laccStartTime,comStartTime,gyrStartTime, soundStartTime, accStopTime,laccStopTime,comStopTime,gyrStopTime, lightStartTime;
@@ -180,8 +181,46 @@ public class Extras extends Fragment {
             else{
                 ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
             }
-
     }
+
+    /**
+     * Return the sub folder name
+     * @return String
+     */
+    public static String getSubFolderName() {
+        return subFolderName;
+    }
+
+    /*public static void addRecordToLog(double message) {
+        String lgtFilename="SOUND_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        final File gyrFile=new File(subfolder,lgtFilename);
+
+        if (!gyrFile.exists())  {
+            try  {
+                Log.d("File created ", "File created ");
+                gyrFile.createNewFile();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try {
+            Date date = new Date();
+            long systemTimeInMilli=(new Date()).getTime();
+            String timestampFormatted=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").format(new Date(systemTimeInMilli));
+
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(gyrFile, true));
+            buf.write("time, #x");
+            buf.write(timestampFormatted + ", " + message +"\n");
+            buf.newLine();
+            buf.flush();
+            buf.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -259,7 +298,7 @@ public class Extras extends Fragment {
 
         noiseCapture.precalculateWeightedA();
 
-        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog);
+        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog, timestampStr);
     }
 
     @Override
@@ -601,7 +640,7 @@ public class Extras extends Fragment {
         final Button startsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStartAll);
 
         final Button stopsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStopAll);
-        logger = new Logger();
+        //logger = new Logger();
 
         startsoundAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -816,30 +855,23 @@ public class Extras extends Fragment {
     }
 
     public void startRecordingAll(){
-        folder= new File(Environment.getExternalStorageDirectory()+"/"+appFolderName);
-        boolean folder_exists=true;
+        /*folder= new File(Environment.getExternalStorageDirectory()+"/"+appFolderName);
+        boolean folder_exists=true;*/
 
         if(isAnyOptionChecked()){
-            if(!folder.exists()){
-                folder_exists=folder.mkdir();
-            }
             if(folder_exists){
-                boolean subfolder_exists=true;
+                /*boolean subfolder_exists=true;
                 date=new Date();
                 time=date.getTime();
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
 
-                String subFolderName=getMode()+"_DATA_"+timestampStr;
+                String subFolderName=getMode()+"_DATA_"+timestampStr;*/
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 } else {
-                    subfolder=new File(Environment.getExternalStorageDirectory()+"/"+appFolderName+"/"+subFolderName);
-                    if(!subfolder.exists()){
-                        subfolder_exists=subfolder.mkdir();
-                    }
                     if(subfolder_exists){
                         getActivity().findViewById(R.id.btnStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnPause).setEnabled(true);
@@ -895,7 +927,7 @@ public class Extras extends Fragment {
     }
 
     private void gsmStartRecord() {
-        String gsmFilename= getMode() + "_GSM_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String gsmFilename= "GSM_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File gsmFile=new File(subfolder,gsmFilename);
 
         mTelManager=(TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
@@ -946,7 +978,7 @@ public class Extras extends Fragment {
         time=date.getTime();
         timestamp=new Timestamp(time);
         timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
-        wifiFileName=getMode() + "_WiFi_"+timestampStr+".txt";
+        wifiFileName="WiFi_"+timestampStr+".txt";
         File WifiLog =new File(subfolder,wifiFileName);
         try {
             fosWiFi=new FileOutputStream(WifiLog);
@@ -984,7 +1016,7 @@ public class Extras extends Fragment {
     }*/
     private void gpsStartRecord(){
 
-        String gpsFilename=getMode() + "_GPS_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String gpsFilename="GPS_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         File gpsFile=new File(subfolder,gpsFilename);
         //locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -1062,7 +1094,7 @@ public class Extras extends Fragment {
     }
 
     private void accStartRecord(){
-        String accFilename=getMode() + "_ACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String accFilename="ACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File accFile=new File(subfolder,accFilename);
 
         try {
@@ -1121,7 +1153,7 @@ public class Extras extends Fragment {
     }
 
     private void laccStartRecord(){
-        String laccFilename=getMode() + "_LACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String laccFilename="LACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File laccFile=new File(subfolder,laccFilename);
 
         try {
@@ -1189,7 +1221,7 @@ public class Extras extends Fragment {
     }
 
     private void comStartRecord(){
-        String comFilename=getMode() + "_COM"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String comFilename="COM_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File comFile=new File(subfolder,comFilename);
 
         try {
@@ -1260,7 +1292,7 @@ public class Extras extends Fragment {
     }
 
     private void gyrStartRecord(){
-        String gyrFilename=getMode() + "_GYR"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String gyrFilename="GYR_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File gyrFile=new File(subfolder,gyrFilename);
         try {
             fosGYR=new FileOutputStream(gyrFile);
@@ -1332,7 +1364,7 @@ public class Extras extends Fragment {
      * Light record
      */
     private void lightStartRecord() {
-        String lgtFilename="LIGHT"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String lgtFilename="LIGHT_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File gyrFile=new File(subfolder,lgtFilename);
         try {
             fosLGT=new FileOutputStream(gyrFile);

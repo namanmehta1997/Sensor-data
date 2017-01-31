@@ -36,15 +36,17 @@ public class Logger {
     private String timestampStr;
     private Date date;
     private Long time;
-
+    private String subfolderName;
     private LocationManager locationManager;
 
 
-    public Logger() {
+    public Logger(String timestampStr) {
+        this.timestampStr = timestampStr;
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
         //String date = df.format(Calendar.getInstance().getTime());
         filename += "_" + date;
-        /*folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        subfolderName = Extras.getSubFolderName();
+        folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
         boolean folder_exists = true;
         if (!folder.exists()) {
             folder_exists = folder.mkdir();
@@ -52,23 +54,22 @@ public class Logger {
 
         if (folder_exists) {
             boolean subfolder_exists = true;
-            date = new Date();
-            time = date.getTime();
-            timestamp = new Timestamp(time);
-            timestampStr = timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
-            String subFolderName = "DATA_" + timestampStr;
-
+            //this.timestampStr = timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+            String subFolderName = "DATA_" + getMode() +'_' + this.timestampStr;
 
             //else {
             subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
             if (!subfolder.exists()) {
                 subfolder_exists = subfolder.mkdir();
             }
-        }*/
+        }
     }
 
     public void addRecordToLog(double message) {
-        String lgtFilename="SOUND_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        date=new Date();
+        time=date.getTime();
+        timestamp=new Timestamp(time);
+        String lgtFilename="SOUND_"+this.timestampStr+".txt";
         final File gyrFile=new File(subfolder,lgtFilename);
 
         if (!gyrFile.exists())  {

@@ -4,12 +4,17 @@ package com.disarm.testapp_newdesing01;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by ajalan on 20/12/16.
@@ -22,6 +27,12 @@ public class ModeOfTransport extends Activity{
     public static String mode="";
     private TextView show;
     private EditText other_mode;
+    private String appFolderName="GPSAndSensorRecorder", timestampStr;
+    private File folder, subfolder;
+    private Date date;
+    private Long time;
+    private Timestamp timestamp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -4,20 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
-import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.MapFragment;
 
 
 public class MainActivity extends ActionBarActivity implements SelectItemFragment.OnFragmentInteractionListener {
@@ -25,7 +19,7 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
     FragmentManager fragmentManager=getFragmentManager();
     Fragment loggerFragment=new GPSAndSensorLogger();
     Fragment busfinderFragment=new BusFinder();
-    Fragment extrasFragment=new Extras();
+    Fragment extrasFragment;
 
     TextView loggerTxtView,busfinderTxtView,extrasTxtView;
 
@@ -35,7 +29,7 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
         setContentView(R.layout.activity_main);
         //setContentView(R.layout.extras_layout);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+        extrasFragment=new Extras();
         loggerTxtView=(TextView)findViewById(R.id.section01);
         busfinderTxtView=(TextView)findViewById(R.id.section02);
         extrasTxtView=(TextView)findViewById(R.id.section03);

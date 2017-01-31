@@ -44,7 +44,7 @@ public class Logger {
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
         //String date = df.format(Calendar.getInstance().getTime());
         filename += "_" + date;
-        folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        /*folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
         boolean folder_exists = true;
         if (!folder.exists()) {
             folder_exists = folder.mkdir();
@@ -64,7 +64,7 @@ public class Logger {
             if (!subfolder.exists()) {
                 subfolder_exists = subfolder.mkdir();
             }
-        }
+        }*/
     }
 
     public void addRecordToLog(double message) {

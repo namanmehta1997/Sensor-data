@@ -104,7 +104,7 @@ public class Extras extends Fragment {
     private int cbmpbrk=0, cbmpwobrk=0, cpothole=0,cimmd=0,cslow=0,cutrn=0,cltrn=0,crtrn=0,cjup=0,cjdown=0, cnrml=0, crgh=0;
     private String bumpbrkStr="Bump with Brake" ,bumpwobrkStr="Bump w/o Brake",potholeStr="PothHole",immdStr="Immediate Brake",slowStr="Slow Brake", uStr="U Turn", lStr="Turn", jupStr="Jerk Up", jdownStr="Jerk Down",nrmlStr="Normal Road",rghStr="Rough Road",bsyStr="Busy Road";
 
-    private String marker="";
+    private String marker="", subFolderName;
     private Map<String, Integer> landmark =new HashMap<String,Integer>();
 
     private String appFolderName="GPSAndSensorRecorder";
@@ -125,9 +125,8 @@ public class Extras extends Fragment {
     Button bmpbrkBtn, potholeBtn, bmpwobrkBtn, immdBtn, slowBtn, uBtn, lBtn, rBtn, jupBtn, jdownBtn, nrmlBtn, rghBtn , bsyBtn;
     ImageView bmpbrkImg,potholeImg,bmpwobrkImg,immdImg,slowImg,uImg,lImg,rImg,jupImg,jdownImg, nrmlImg, rghImg;
     CheckBox checkACC,checkLACC,checkGPS,checkGYR,checkCOM, checkGSM, checkWiFi,checkLight, checkSound;
-    private boolean lightStarted = false, gpsStarted = false, gsmStarted = false, accStarted = false, laccStarted = false, comStarted = false, gyrStarted = false, wifiStarted = false;
+    private boolean lightStarted = false, gpsStarted = false, gsmStarted = false, accStarted = false, laccStarted = false, comStarted = false, gyrStarted = false, wifiStarted = false, folder_exists=true, subfolder_exists=true;
     //boolean GPS_STARTED=false;
-
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
     Logger logger;
@@ -151,12 +150,45 @@ public class Extras extends Fragment {
             / BLOCK_SIZE_FFT;
     NoiseCapture noiseCapture = new NoiseCapture();
 
+    /**
+     * Create a subfolder whenever the fragment is started
+     */
+    public void createFolder() {
+        folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        folder_exists = true;
+            if (!folder.exists()) {
+                folder_exists = folder.mkdir();
+            }
+            if (folder_exists) {
+                subfolder_exists=true;
+                date=new Date();
+                time=date.getTime();
+                timestamp=new Timestamp(time);
+                timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+                subFolderName=  "DATA_" + getMode() +'_' + timestampStr;
+                    subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
+                    if (!subfolder.exists()) {
+                        subfolder_exists = subfolder.mkdir();
+                    }
+                    if (subfolder_exists) {
+                    }
+                    else{
+                        ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+                    }
+
+            }
+            else{
+                ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+            }
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //called only once in the lifetime of fragment. When the fragment is added to the app first.
         super.onCreate(savedInstanceState);
         Log.d("Surji","LoggerFrag_OnCreate Has Called");
+        createFolder();
     }
 
     @Nullable
@@ -240,6 +272,7 @@ public class Extras extends Fragment {
 
         initiateLandMarks();
         checkAvailableSensors();
+
         //initiateDetails();
 
         powerManager=(PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
@@ -723,40 +756,39 @@ public class Extras extends Fragment {
     }
 
     private boolean isAnyOptionChecked(){
-        if ((checkACC.isChecked() || checkLACC.isChecked() || checkCOM.isChecked() || checkGYR.isChecked() ||checkGPS.isChecked()) ||checkGSM.isChecked() || checkLight.isChecked()){
+        if ((checkACC.isChecked() || checkLACC.isChecked() || checkCOM.isChecked() || checkGYR.isChecked() ||checkGPS.isChecked()) ||checkGSM.isChecked()){
             return true;
         }else {
             return false;
         }
     }
 
+    private boolean isLightSensorChecked() {
+       if (checkLight.isChecked())
+           return true;
+        else return false;
+    }
+
     /**
      * Start recording the light data
      */
     public void startLightRecordingAll() {
-        folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
-        boolean folder_exists = true;
-        if (isAnyOptionChecked()) {
-            if (!folder.exists()) {
-                folder_exists = folder.mkdir();
-            }
+        //folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        //boolean folder_exists = true;
+        if (isLightSensorChecked()) {
             if (folder_exists) {
-                boolean subfolder_exists=true;
+                /*boolean subfolder_exists=true;
                 date=new Date();
                 time=date.getTime();
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
-                String subFolderName="DATA_"+timestampStr;
+                String subFolderName=getMode() + "_DATA_"+timestampStr;*/
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 }
                 else {
-                    subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
-                    if (!subfolder.exists()) {
-                        subfolder_exists = subfolder.mkdir();
-                    }
                     if (subfolder_exists) {
                         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnlightPause).setEnabled(true);
@@ -778,7 +810,7 @@ public class Extras extends Fragment {
             }
         }
         else{
-            ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check at least one Option to Record");
+            ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check Light Option to Record");
         }
 
     }
@@ -798,7 +830,7 @@ public class Extras extends Fragment {
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
 
-                String subFolderName="DATA_"+timestampStr;
+                String subFolderName=getMode()+"_DATA_"+timestampStr;
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -1300,7 +1332,7 @@ public class Extras extends Fragment {
      * Light record
      */
     private void lightStartRecord() {
-        String lgtFilename=getMode() + "_LIGHT"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String lgtFilename="LIGHT"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File gyrFile=new File(subfolder,lgtFilename);
         try {
             fosLGT=new FileOutputStream(gyrFile);

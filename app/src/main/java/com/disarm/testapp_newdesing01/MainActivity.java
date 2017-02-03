@@ -3,6 +3,7 @@ package com.disarm.testapp_newdesing01;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import static android.content.pm.ActivityInfo.*;
 
 
 public class MainActivity extends ActionBarActivity implements SelectItemFragment.OnFragmentInteractionListener {
@@ -26,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         //setContentView(R.layout.extras_layout);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -60,14 +64,66 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings ) {
             return true;
-        }
+        }*/
+            switch (item.getItemId()) {
+                case R.id.action_settings:
+                    return true;
+                case R.id.checkGPS:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
 
-        return super.onOptionsItemSelected(item);
+                    return true;
+                case R.id.checkACC:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkLACC:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkGYR:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkCOM:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkGSM:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkWiFi:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkLGT:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                default: return super.onOptionsItemSelected(item);
+            }
+
     }
 
     public void sectionBarAction(View view){

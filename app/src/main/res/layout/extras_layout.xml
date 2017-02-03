@@ -11,7 +11,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_2"
     android:orientation="vertical">
 
     <LinearLayout
@@ -39,70 +38,7 @@
                     android:layout_weight="1"
                     android:id="@+id/txtRecord" />
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/gpsTag"
-                    android:checked="true"
-                    android:layout_weight="1"
-                    android:id="@+id/checkGPS" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/accTag"
-                    android:checked="true"
-                    android:layout_weight="1"
-                    android:id="@+id/checkACC" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/laccTag"
-                    android:checked="true"
-                    android:id="@+id/checkLACC" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/gyrTag"
-                    android:checked="true"
-                    android:id="@+id/checkGYR" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/comTag"
-                    android:checked="true"
-                    android:id="@+id/checkCOM" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/gsmTag"
-                    android:checked="true"
-                    android:layout_weight="1"
-                    android:id="@+id/checkGSM" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="@string/wifiTag"
-                    android:checked="true"
-                    android:layout_weight="1"
-                    android:id="@+id/checkWiFi" />
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="Light"
-                    android:checked="true"
-                    android:id="@+id/checkLGT" />
+
 
             </LinearLayout>
             <LinearLayout
@@ -112,21 +48,14 @@
                 android:layout_weight="1"
                 android:weightSum="1">
 
-                <!--<TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:id="@+id/txtDetails"
-                    android:text="Details:"/>-->
-
-                <TextView
-                    android:layout_width="197dp"
-                    android:layout_height="42dp"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:id="@+id/txtStatus"
-                    android:text="" />
+                <ProgressBar
+                    android:id="@+id/lightmeter"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:padding="20dp"
+                    android:progress="0" />
 
             </LinearLayout>
 

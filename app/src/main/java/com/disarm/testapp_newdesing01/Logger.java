@@ -40,13 +40,14 @@ public class Logger {
     private LocationManager locationManager;
 
 
-    public Logger(String timestampStr) {
+    public Logger(String timestampStr, File subfolder) {
         this.timestampStr = timestampStr;
+        this.subfolder = subfolder;
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
         //String date = df.format(Calendar.getInstance().getTime());
         filename += "_" + date;
         subfolderName = Extras.getSubFolderName();
-        folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        /*folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
         boolean folder_exists = true;
         if (!folder.exists()) {
             folder_exists = folder.mkdir();
@@ -62,7 +63,7 @@ public class Logger {
             if (!subfolder.exists()) {
                 subfolder_exists = subfolder.mkdir();
             }
-        }
+        }*/
     }
 
     public void addRecordToLog(double message) {
@@ -70,7 +71,7 @@ public class Logger {
         time=date.getTime();
         timestamp=new Timestamp(time);
         String lgtFilename="SOUND_"+this.timestampStr+".txt";
-        final File gyrFile=new File(subfolder,lgtFilename);
+        final File gyrFile=new File(this.subfolder,lgtFilename);
 
         if (!gyrFile.exists())  {
             try  {

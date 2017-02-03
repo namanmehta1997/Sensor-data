@@ -5,6 +5,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -110,7 +111,7 @@ public class NoiseCapture {
             weightedA[i] = weightFormula;
         }
     }
-    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog, final String timestampStr) {
+    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog, final String timestampStr, final File subfolder) {
 
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -526,7 +527,7 @@ public class NoiseCapture {
                                 @Override
                                 public void run() {
                                     Log.v("NOISE", String.valueOf(dbATimeDisplay));
-                                    logger = new Logger(timestampStr);
+                                    logger = new Logger(timestampStr, subfolder);
                                     logger.addRecordToLog(dbATimeDisplay);
 
                                 }

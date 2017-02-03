@@ -461,7 +461,7 @@ public class GPSAndSensorLogger extends Fragment {
         final Button startlightAllBtn=(Button)getActivity().findViewById(R.id.btnlightStartAll);
 
         final Button stoplightAllBtn=(Button)getActivity().findViewById(R.id.btnlightStopAll);
-        logger = new Logger(timestampStr);
+        logger = new Logger(timestampStr, subfolder);
         startlightAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -509,7 +509,7 @@ public class GPSAndSensorLogger extends Fragment {
         final Button startsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStartAll);
 
         final Button stopsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStopAll);
-        logger = new Logger(timestampStr);
+        logger = new Logger(timestampStr, subfolder);
 
         startsoundAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override

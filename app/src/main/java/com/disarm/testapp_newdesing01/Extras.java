@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -24,6 +25,9 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +47,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -67,6 +72,7 @@ import java.util.TimerTask;
 import java.util.*;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.content.pm.ActivityInfo.*;
 import static com.disarm.testapp_newdesing01.ModeOfTransport.getMode;
 
 
@@ -121,15 +127,15 @@ public class Extras extends Fragment {
     private WifiReceiver receiverWifi;
 
     TextView errorTextView;
-    TextView detailsTextView,statusTextView;
 
     Button bmpbrkBtn, potholeBtn, bmpwobrkBtn, immdBtn, slowBtn, uBtn, lBtn, rBtn, jupBtn, jdownBtn, nrmlBtn, rghBtn , bsyBtn;
     ImageView bmpbrkImg,potholeImg,bmpwobrkImg,immdImg,slowImg,uImg,lImg,rImg,jupImg,jdownImg, nrmlImg, rghImg;
-    CheckBox checkACC,checkLACC,checkGPS,checkGYR,checkCOM, checkGSM, checkWiFi,checkLight, checkSound;
+    MenuItem checkACC,checkLACC,checkGPS,checkGYR,checkCOM, checkGSM, checkWiFi,checkLight, checkSound;
     private boolean lightStarted = false, gpsStarted = false, gsmStarted = false, accStarted = false, laccStarted = false, comStarted = false, gyrStarted = false, wifiStarted = false, folder_exists=true, subfolder_exists=true;
     //boolean GPS_STARTED=false;
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
+    ProgressBar lightMeter;
     Logger logger;
 
     private FileOutputStream fosrate;
@@ -191,41 +197,11 @@ public class Extras extends Fragment {
         return subFolderName;
     }
 
-    /*public static void addRecordToLog(double message) {
-        String lgtFilename="SOUND_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
-        final File gyrFile=new File(subfolder,lgtFilename);
-
-        if (!gyrFile.exists())  {
-            try  {
-                Log.d("File created ", "File created ");
-                gyrFile.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        try {
-            Date date = new Date();
-            long systemTimeInMilli=(new Date()).getTime();
-            String timestampFormatted=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").format(new Date(systemTimeInMilli));
-
-            //BufferedWriter for performance, true to set append to file flag
-            BufferedWriter buf = new BufferedWriter(new FileWriter(gyrFile, true));
-            buf.write("time, #x");
-            buf.write(timestampFormatted + ", " + message +"\n");
-            buf.newLine();
-            buf.flush();
-            buf.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //called only once in the lifetime of fragment. When the fragment is added to the app first.
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         Log.d("Surji","LoggerFrag_OnCreate Has Called");
         createFolder();
     }
@@ -276,6 +252,13 @@ public class Extras extends Fragment {
         Log.d("Surji","LoggerFrag_OnDetach Has Called");
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    
+
     private void startNoiseRecording(){
         try {
             gain = Float.parseFloat(gainString);
@@ -298,7 +281,7 @@ public class Extras extends Fragment {
 
         noiseCapture.precalculateWeightedA();
 
-        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog, timestampStr);
+        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog, timestampStr, subfolder);
     }
 
     @Override
@@ -306,8 +289,6 @@ public class Extras extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         errorTextView=(TextView)getActivity().findViewById(R.id.txtError);
-        //detailsTextView=(TextView)getActivity().findViewById(R.id.txtDetails);
-        statusTextView=(TextView)getActivity().findViewById(R.id.txtStatus);
 
         initiateLandMarks();
         checkAvailableSensors();
@@ -317,6 +298,7 @@ public class Extras extends Fragment {
         powerManager=(PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
         wakeLock=powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"LoggerWakeLock");
 
+        lightMeter = (ProgressBar)getActivity().findViewById(R.id.lightmeter);
 
         bmpbrkBtn=(Button)getActivity().findViewById(R.id.btnLM1);
         potholeBtn=(Button)getActivity().findViewById(R.id.btnLM2);
@@ -331,15 +313,15 @@ public class Extras extends Fragment {
         nrmlBtn = (Button)getActivity().findViewById(R.id.btnLM11);
         rghBtn = (Button)getActivity().findViewById(R.id.btnLM12);
         bsyBtn = (Button)getActivity().findViewById(R.id.btnLM13);
-
-        checkACC=(CheckBox)getActivity().findViewById(R.id.checkACC);
-        checkLACC=(CheckBox)getActivity().findViewById(R.id.checkLACC);
-        checkGYR=(CheckBox)getActivity().findViewById(R.id.checkGYR);
-        checkCOM=(CheckBox)getActivity().findViewById(R.id.checkCOM);
-        checkGPS=(CheckBox)getActivity().findViewById(R.id.checkGPS);
-        checkGSM=(CheckBox)getActivity().findViewById(R.id.checkGSM);
-        checkWiFi=(CheckBox)getActivity().findViewById(R.id.checkWiFi);
-        checkLight = (CheckBox)getActivity().findViewById(R.id.checkLGT);
+        //MenuItem men= (MenuItem)getActivity().findViewById(R.id.checkACC) ;
+        checkACC=(MenuItem)getActivity().findViewById(R.id.checkACC);
+        checkLACC=(MenuItem)getActivity().findViewById(R.id.checkLACC);
+        checkGYR=(MenuItem)getActivity().findViewById(R.id.checkGYR);
+        checkCOM=(MenuItem)getActivity().findViewById(R.id.checkCOM);
+        checkGPS=(MenuItem)getActivity().findViewById(R.id.checkGPS);
+        checkGSM=(MenuItem)getActivity().findViewById(R.id.checkGSM);
+        checkWiFi=(MenuItem)getActivity().findViewById(R.id.checkWiFi);
+        checkLight = (MenuItem)getActivity().findViewById(R.id.checkLGT);
 
         bmpbrkImg=(ImageView)getActivity().findViewById(R.id.imgLM1);
         potholeImg=(ImageView)getActivity().findViewById(R.id.imgLM2);
@@ -408,7 +390,6 @@ public class Extras extends Fragment {
                 if(state.equals("Continue")){
                     //recording paused
                     Log.d("test","Paused");
-                    statusTextView.setText("Recording Paused");
 
                     if(gpsStarted){
                         locationManager.removeUpdates(locationListener);
@@ -488,7 +469,6 @@ public class Extras extends Fragment {
                         getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                         t1.scheduleAtFixedRate(tt,0,1000);
                     }
-                    statusTextView.setText("Recording Continuing");
                 }
             }
         });
@@ -562,7 +542,6 @@ public class Extras extends Fragment {
 
                 if (state.equals("Continue")) {
                     Log.d("test", "Paused");
-                    statusTextView.setText("Recording Paused");
 
                     if (lightStarted) {
                         lightSensorManager.unregisterListener(lightSensorEventListener, lightSensor);
@@ -584,7 +563,6 @@ public class Extras extends Fragment {
                     lightStartTime = date;
                     if(accStarted)
                         lightSensorManager.registerListener(lightSensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-                    statusTextView.setText("Recording Continuing");
                 }
             }
         });
@@ -654,7 +632,6 @@ public class Extras extends Fragment {
                                 getActivity().findViewById(R.id.btnsoundStartAll).setEnabled(false);
                                 getActivity().findViewById(R.id.btnsoundPause).setEnabled(true);
                                 getActivity().findViewById(R.id.btnsoundStopAll).setEnabled(true);
-                                statusTextView.setText("Recording in Progress");
                                 wakeLock.acquire();
                                 startNoiseRecording();
 
@@ -693,7 +670,7 @@ public class Extras extends Fragment {
                                 getActivity().findViewById(R.id.btnsoundStartAll).setEnabled(true);
                                 getActivity().findViewById(R.id.btnsoundPause).setEnabled(false);
                                 getActivity().findViewById(R.id.btnsoundStopAll).setEnabled(false);
-                                statusTextView.setText("");
+
                                 wakeLock.release();
 
                                 date=new Date();
@@ -832,7 +809,7 @@ public class Extras extends Fragment {
                         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnlightPause).setEnabled(true);
                         getActivity().findViewById(R.id.btnlightStopAll).setEnabled(true);
-                        statusTextView.setText("Recording in Progress");
+
                         wakeLock.acquire();
 
                         if (checkLight.isChecked()) {
@@ -876,7 +853,7 @@ public class Extras extends Fragment {
                         getActivity().findViewById(R.id.btnStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnPause).setEnabled(true);
                         getActivity().findViewById(R.id.btnStopAll).setEnabled(true);
-                        statusTextView.setText("Recording in Progress");
+
                         wakeLock.acquire();
                         //Getting GPS Data and writing into a file
                         //getActivity().findViewById(R.id.btnGpsStart).setEnabled(false);
@@ -1401,7 +1378,7 @@ public class Extras extends Fragment {
                     }
 
                     String lightSensorDetails="\n"+x+","+timestampFormatted+","+marker;
-
+                    lightMeter.setProgress((int)event.values[0]);
                     try{
 
                         fosLGT.write(lightSensorDetails.getBytes());
@@ -1432,7 +1409,7 @@ public class Extras extends Fragment {
         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(true);
         getActivity().findViewById(R.id.btnlightPause).setEnabled(false);
         getActivity().findViewById(R.id.btnlightStopAll).setEnabled(false);
-        statusTextView.setText("");
+
         wakeLock.release();
 
         date=new Date();
@@ -1459,7 +1436,7 @@ public class Extras extends Fragment {
         getActivity().findViewById(R.id.btnStartAll).setEnabled(true);
         getActivity().findViewById(R.id.btnPause).setEnabled(false);
         getActivity().findViewById(R.id.btnStopAll).setEnabled(false);
-        statusTextView.setText("");
+
         wakeLock.release();
 
         initiateLandMarks();

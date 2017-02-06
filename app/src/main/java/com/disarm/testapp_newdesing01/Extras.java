@@ -130,12 +130,12 @@ public class Extras extends Fragment {
 
     Button bmpbrkBtn, potholeBtn, bmpwobrkBtn, immdBtn, slowBtn, uBtn, lBtn, rBtn, jupBtn, jdownBtn, nrmlBtn, rghBtn , bsyBtn;
     ImageView bmpbrkImg,potholeImg,bmpwobrkImg,immdImg,slowImg,uImg,lImg,rImg,jupImg,jdownImg, nrmlImg, rghImg;
-    MenuItem checkACC,checkLACC,checkGPS,checkGYR,checkCOM, checkGSM, checkWiFi,checkLight, checkSound;
+    private boolean checkACC=true, checkLACC=true, checkGPS=true, checkGYR=true, checkCOM=true, checkGSM=true, checkWiFi=true, checkLGT=true;
     private boolean lightStarted = false, gpsStarted = false, gsmStarted = false, accStarted = false, laccStarted = false, comStarted = false, gyrStarted = false, wifiStarted = false, folder_exists=true, subfolder_exists=true;
     //boolean GPS_STARTED=false;
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
-    ProgressBar lightMeter;
+    ProgressBar lightMeter, soundMeter;
     Logger logger;
 
     private FileOutputStream fosrate;
@@ -253,11 +253,111 @@ public class Extras extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        //int id = item.getItemId();
 
-    
+        //noinspection SimplifiableIfStatement
+        /*if (id == R.id.action_settings ) {
+            return true;
+        }*/
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.checkGPS:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkGPS=false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkGPS=true;
+                }
+
+                return true;
+            case R.id.checkACC:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkACC=false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkACC=true;
+                }
+
+                return true;
+            case R.id.checkLACC:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkLACC=false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkLACC=true;
+                }
+
+                return true;
+            case R.id.checkGYR:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkGYR = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkGYR=true;
+                }
+
+                return true;
+            case R.id.checkCOM:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkCOM = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkCOM=true;
+                }
+
+                return true;
+            case R.id.checkGSM:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkGSM = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkGSM=true;
+                }
+
+                return true;
+            case R.id.checkWiFi:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkWiFi = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkWiFi=true;
+                }
+
+                return true;
+            case R.id.checkLGT:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkLGT = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkLGT=true;
+                }
+
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     private void startNoiseRecording(){
         try {
@@ -281,7 +381,7 @@ public class Extras extends Fragment {
 
         noiseCapture.precalculateWeightedA();
 
-        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog, timestampStr, subfolder);
+        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog, timestampStr, subfolder, soundMeter);
     }
 
     @Override
@@ -299,6 +399,7 @@ public class Extras extends Fragment {
         wakeLock=powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"LoggerWakeLock");
 
         lightMeter = (ProgressBar)getActivity().findViewById(R.id.lightmeter);
+        soundMeter = (ProgressBar)getActivity().findViewById(R.id.soundmeter);
 
         bmpbrkBtn=(Button)getActivity().findViewById(R.id.btnLM1);
         potholeBtn=(Button)getActivity().findViewById(R.id.btnLM2);
@@ -313,15 +414,15 @@ public class Extras extends Fragment {
         nrmlBtn = (Button)getActivity().findViewById(R.id.btnLM11);
         rghBtn = (Button)getActivity().findViewById(R.id.btnLM12);
         bsyBtn = (Button)getActivity().findViewById(R.id.btnLM13);
-        //MenuItem men= (MenuItem)getActivity().findViewById(R.id.checkACC) ;
-        checkACC=(MenuItem)getActivity().findViewById(R.id.checkACC);
+
+        /*checkACC=(MenuItem)getActivity().findViewById(R.id.checkACC);
         checkLACC=(MenuItem)getActivity().findViewById(R.id.checkLACC);
         checkGYR=(MenuItem)getActivity().findViewById(R.id.checkGYR);
         checkCOM=(MenuItem)getActivity().findViewById(R.id.checkCOM);
         checkGPS=(MenuItem)getActivity().findViewById(R.id.checkGPS);
         checkGSM=(MenuItem)getActivity().findViewById(R.id.checkGSM);
         checkWiFi=(MenuItem)getActivity().findViewById(R.id.checkWiFi);
-        checkLight = (MenuItem)getActivity().findViewById(R.id.checkLGT);
+        checkLGT = (MenuItem)getActivity().findViewById(R.id.checkLGT);*/
 
         bmpbrkImg=(ImageView)getActivity().findViewById(R.id.imgLM1);
         potholeImg=(ImageView)getActivity().findViewById(R.id.imgLM2);
@@ -771,7 +872,7 @@ public class Extras extends Fragment {
         }
     }
 
-    private boolean isAnyOptionChecked(){
+    /*private boolean isAnyOptionChecked(){
         if ((checkACC.isChecked() || checkLACC.isChecked() || checkCOM.isChecked() || checkGYR.isChecked() ||checkGPS.isChecked()) ||checkGSM.isChecked()){
             return true;
         }else {
@@ -780,10 +881,26 @@ public class Extras extends Fragment {
     }
 
     private boolean isLightSensorChecked() {
-       if (checkLight.isChecked())
+       if (checkLGT.isChecked())
            return true;
         else return false;
+    }*/
+
+    private boolean isAnyOptionChecked(){
+        if (checkACC || checkLACC || checkCOM || checkGYR ||checkGSM){
+            return true;
+        }else {
+            return false;
+        }
     }
+
+    private boolean isLightSensorChecked() {
+        if (checkLGT)
+            return true;
+        else return false;
+    }
+
+
 
     /**
      * Start recording the light data
@@ -801,7 +918,7 @@ public class Extras extends Fragment {
                 String subFolderName=getMode() + "_DATA_"+timestampStr;*/
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                if(checkGPS && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 }
                 else {
@@ -812,7 +929,7 @@ public class Extras extends Fragment {
 
                         wakeLock.acquire();
 
-                        if (checkLight.isChecked()) {
+                        if (checkLGT) {
                             lightStartRecord();
                         }
                     }
@@ -846,7 +963,7 @@ public class Extras extends Fragment {
                 String subFolderName=getMode()+"_DATA_"+timestampStr;*/
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                if(checkGPS && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 } else {
                     if(subfolder_exists){
@@ -858,33 +975,33 @@ public class Extras extends Fragment {
                         //Getting GPS Data and writing into a file
                         //getActivity().findViewById(R.id.btnGpsStart).setEnabled(false);
 
-                        if(checkGPS.isChecked())
+                        if(checkGPS)
                             gpsStartRecord();
 
                         //Getting AcceleroMeter Data and writing to file
                         //getActivity().findViewById(R.id.btnAccStart).setEnabled(false);
-                        if(checkACC.isChecked())
+                        if(checkACC)
                             accStartRecord();
 
                         //Getting Linear AcceleroMeter Data and writing to file
                         //getActivity().findViewById(R.id.btnLaccStart).setEnabled(false);
-                        if(checkLACC.isChecked())
+                        if(checkLACC)
                             laccStartRecord();
 
                         //Getting Compass Data and writing to file
                         //getActivity().findViewById(R.id.btnComStart).setEnabled(false);
-                        if(checkCOM.isChecked())
+                        if(checkCOM)
                             comStartRecord();
 
                         //Getting GYROSCOPE data and writing it to file
                         //getActivity().findViewById(R.id.btnGyrStart).setEnabled(false);
-                        if(checkGYR.isChecked())
+                        if(checkGYR)
                             gyrStartRecord();
 
-                        if(checkGSM.isChecked())
+                        if(checkGSM)
                             gsmStartRecord();
 
-                        if(checkWiFi.isChecked())
+                        if(checkWiFi)
                             wifiStartRecord();
                     }
                     else{
@@ -897,10 +1014,10 @@ public class Extras extends Fragment {
                 //errorTag.setText("Failed to create Folder for application");
             }
 
-        }else{
+        }
+        else{
             ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check at least one Option to Record");
         }
-
     }
 
     private void gsmStartRecord() {

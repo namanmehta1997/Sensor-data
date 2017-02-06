@@ -67,10 +67,10 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
         //int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings ) {
+        if (item.getItemId() == R.id.action_settings ) {
             return true;
-        }*/
-            switch (item.getItemId()) {
+        }
+            /*switch (item.getItemId()) {
                 case R.id.action_settings:
                     return true;
                 case R.id.checkGPS:
@@ -122,8 +122,8 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
 
                     return true;
                 default: return super.onOptionsItemSelected(item);
-            }
-
+            }*/
+        return super.onOptionsItemSelected(item);
     }
 
     public void sectionBarAction(View view){

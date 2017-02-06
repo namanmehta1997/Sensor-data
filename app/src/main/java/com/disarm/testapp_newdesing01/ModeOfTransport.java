@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -43,9 +44,11 @@ public class ModeOfTransport extends Activity{
         show.setText("Select a mode of transport:");
         other_mode = (EditText) findViewById(R.id.editText);
         other_mode.setEnabled(false);
+        submit.setEnabled(false);
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                submit.setEnabled(true);
                 RadioButton others = (RadioButton) findViewById(R.id.rb_others);
                 RadioButton checked= (RadioButton) findViewById(checkedId);
                 if(others == checked){
@@ -53,8 +56,6 @@ public class ModeOfTransport extends Activity{
                 }
             }
         });
-
-
         OnSubmitClick();
     }
     public void OnSubmitClick() {

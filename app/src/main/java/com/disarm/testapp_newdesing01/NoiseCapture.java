@@ -4,6 +4,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -90,6 +91,8 @@ public class NoiseCapture {
     private double actualFreq;
     private float gain;
 
+    ProgressBar soundMeter;
+
 
     public void precalculateWeightedA() {
         for (int i = 0; i < BLOCK_SIZE_FFT; i++) {
@@ -111,7 +114,7 @@ public class NoiseCapture {
             weightedA[i] = weightFormula;
         }
     }
-    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog, final String timestampStr, final File subfolder) {
+    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog, final String timestampStr, final File subfolder, final ProgressBar soundMeter) {
 
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -527,6 +530,7 @@ public class NoiseCapture {
                                 @Override
                                 public void run() {
                                     Log.v("NOISE", String.valueOf(dbATimeDisplay));
+                                    soundMeter.setProgress((int)dbATimeDisplay);
                                     logger = new Logger(timestampStr, subfolder);
                                     logger.addRecordToLog(dbATimeDisplay);
 

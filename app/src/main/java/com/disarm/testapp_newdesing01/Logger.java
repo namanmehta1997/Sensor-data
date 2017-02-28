@@ -38,7 +38,9 @@ public class Logger {
     private Long time;
 
     private LocationManager locationManager;
-
+    private DateFormat df1 = new SimpleDateFormat("dd_MM_yy");
+    private DateFormat dftime = new SimpleDateFormat("HH_mm_ss");
+    private static Date dateobj = Extras.dateobj;
 
     public Logger() {
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
@@ -56,19 +58,19 @@ public class Logger {
             time = date.getTime();
             timestamp = new Timestamp(time);
             timestampStr = timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
-            String subFolderName = "DATA_" + timestampStr;
+            String subFolderName = "DATA_" + dftime.format(dateobj);
 
 
             //else {
-            subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
+            subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" +"Date_"+df1.format(dateobj)+"/"+ subFolderName+"/"+"Sound");
             if (!subfolder.exists()) {
-                subfolder_exists = subfolder.mkdir();
+                subfolder_exists = subfolder.mkdirs();
             }
         }
     }
 
     public void addRecordToLog(double message) {
-        String lgtFilename="SOUND_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String lgtFilename=getMode()+"_SOUND_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File gyrFile=new File(subfolder,lgtFilename);
 
         if (!gyrFile.exists())  {
@@ -87,8 +89,7 @@ public class Logger {
 
             //BufferedWriter for performance, true to set append to file flag
             BufferedWriter buf = new BufferedWriter(new FileWriter(gyrFile, true));
-            buf.write("time, #x");
-            buf.write(timestampFormatted + ", " + message +"\n");
+            buf.write(timestampFormatted + ", " + message);
             buf.newLine();
             buf.flush();
             buf.close();

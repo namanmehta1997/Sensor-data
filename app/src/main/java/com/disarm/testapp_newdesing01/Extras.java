@@ -64,7 +64,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.disarm.testapp_newdesing01.ModeOfTransport.getMode;
@@ -83,26 +85,18 @@ public class Extras extends Fragment {
     private SensorEventListener accSensorEventListener,laccSensorEventListener,comSensorEventListener,gyrSensorEventListener, lightSensorEventListener;
     PhoneStateListener mSignalListener;
     MediaRecorder mRecorder = null;
-    Timer t = new  Timer();
-    Timer t1 = new Timer();
-    TimerTask tt = new TimerTask() {
-        @Override
-        public void run() {
-            mainWifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-            if (receiverWifi==null) {
-                receiverWifi = new WifiReceiver();
-            }
-            //receiverWifi = new WifiReceiver();
-            getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-            mainWifi.startScan();
-        }
-    };
+    //WiFi Timer Variables
+    private static int timerCount=0;
+    private Timer t = new  Timer();
+    private Timer t1[] = new Timer[100];
+    private TimerTask tt[] = new TimerTask[100];
+
     private final Handler handler = new Handler();
     private Sensor accSensor,laccSensor,comSensor,gyrSensor, lightSensor;
 
-    private int fbmpbrk=0, fbmpwobrk=0, fpothole=0,fimmd=0,fslow=0,futrn=0,fltrn=0,frtrn=0,fjup=0,fjdown=0, fnrml=0, frgh=0;
-    private int cbmpbrk=0, cbmpwobrk=0, cpothole=0,cimmd=0,cslow=0,cutrn=0,cltrn=0,crtrn=0,cjup=0,cjdown=0, cnrml=0, crgh=0;
-    private String bumpbrkStr="Bump with Brake" ,bumpwobrkStr="Bump w/o Brake",potholeStr="PothHole",immdStr="Immediate Brake",slowStr="Slow Brake", uStr="U Turn", lStr="Turn", jupStr="Jerk Up", jdownStr="Jerk Down",nrmlStr="Normal Road",rghStr="Rough Road",bsyStr="Busy Road";
+    private int fbmpbrk=0, fbmpwobrk=0, fpothole=0,fimmd=0,fslow=0,futrn=0,fltrn=0,frtrn=0,fjup=0,fjdown=0, fnrml=0, frgh=0, fbsy=0;
+    private int cbmpbrk=0, cbmpwobrk=0, cpothole=0,cimmd=0,cslow=0,cutrn=0,cltrn=0,crtrn=0,cjup=0,cjdown=0, cnrml=0, crgh=0, cbsy=0;
+    private String bumpbrkStr="Bump with Brake" ,bumpwobrkStr="Bump w/o Brake",potholeStr="PothHole",immdStr="Immediate Brake",slowStr="Slow Brake", uStr="U Turn", lStr="Turn", jupStr="Jerk Up", jdownStr="Jerk Down",nrmlStr="Bus Stop",rghStr="Rough Road",bsyStr="Busy Road";
 
     private String marker="";
     private Map<String, Integer> landmark =new HashMap<String,Integer>();
@@ -123,7 +117,7 @@ public class Extras extends Fragment {
     TextView detailsTextView,statusTextView;
 
     Button bmpbrkBtn, potholeBtn, bmpwobrkBtn, immdBtn, slowBtn, uBtn, lBtn, rBtn, jupBtn, jdownBtn, nrmlBtn, rghBtn , bsyBtn;
-    ImageView bmpbrkImg,potholeImg,bmpwobrkImg,immdImg,slowImg,uImg,lImg,rImg,jupImg,jdownImg, nrmlImg, rghImg;
+    ImageView bmpbrkImg,potholeImg,bmpwobrkImg,immdImg,slowImg,uImg,lImg,rImg,jupImg,jdownImg, nrmlImg, rghImg, bsyImg;
     CheckBox checkACC,checkLACC,checkGPS,checkGYR,checkCOM, checkGSM, checkWiFi,checkLight, checkSound;
     private boolean lightStarted = false, gpsStarted = false, gsmStarted = false, accStarted = false, laccStarted = false, comStarted = false, gyrStarted = false, wifiStarted = false;
     //boolean GPS_STARTED=false;
@@ -135,6 +129,10 @@ public class Extras extends Fragment {
     private FileOutputStream fosrate;
     public static int rating,rating_final;
     public static File rateFile;
+
+    DateFormat df = new SimpleDateFormat("dd_MM_yy");
+    DateFormat dftime = new SimpleDateFormat("HH_mm_ss");
+    public static Date dateobj = new Date();
 
     ////////////Noise Variable
     private float gain;
@@ -149,7 +147,7 @@ public class Extras extends Fragment {
     private final static int RECORDER_SAMPLERATE = 44100;
     private final static int NUMBER_OF_FFT_PER_SECOND = RECORDER_SAMPLERATE
             / BLOCK_SIZE_FFT;
-    NoiseCapture noiseCapture = new NoiseCapture();
+    NoiseCapture noiseCapture;
 
 
     @Override
@@ -281,6 +279,7 @@ public class Extras extends Fragment {
         jdownImg=(ImageView)getActivity().findViewById(R.id.imgLM10);
         nrmlImg=(ImageView)getActivity().findViewById(R.id.imgLM11);
         rghImg=(ImageView)getActivity().findViewById(R.id.imgLM12);
+        bsyImg=(ImageView)getActivity().findViewById(R.id.imgLM13);
 
         /*
         checkGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -357,7 +356,7 @@ public class Extras extends Fragment {
                         mTelManager.listen(mSignalListener, PhoneStateListener.LISTEN_NONE);
                     }
                     if(wifiStarted){
-                        t1.cancel();
+                        t1[timerCount-1].cancel();
                         getActivity().unregisterReceiver(receiverWifi);
                     }
 
@@ -414,7 +413,21 @@ public class Extras extends Fragment {
                     if(wifiStarted)
                     {
                         getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-                        t1.scheduleAtFixedRate(tt,0,1000);
+                        tt[timerCount] = new TimerTask() {
+                            @Override
+                            public void run() {
+                                mainWifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+                                if (receiverWifi==null) {
+                                    receiverWifi = new WifiReceiver();
+                                }
+                                //receiverWifi = new WifiReceiver();
+                                getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                                mainWifi.startScan();
+                            }
+                        };
+                        t1[timerCount] = new Timer();
+                        t1[timerCount].scheduleAtFixedRate(tt[timerCount],0,1000);
+                        timerCount++;
                     }
                     statusTextView.setText("Recording Continuing");
                 }
@@ -524,6 +537,7 @@ public class Extras extends Fragment {
         startlightAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //noiseCapture = new NoiseCapture();
                 DialogInterface.OnClickListener dialogListener=new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -566,16 +580,42 @@ public class Extras extends Fragment {
 
         // For sound applications
         final Button startsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStartAll);
-
         final Button stopsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStopAll);
-        logger = new Logger();
+        final Button pauseSoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundPause);
+        //logger = new Logger();
 
-        startsoundAllBtn.setOnClickListener(new View.OnClickListener() {
+        pauseSoundAllBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public  void  onClick(View v){
+                String state=(String) pauseSoundAllBtn.getText();
+                Log.d("test1", state);
+
+                if(state.equals("Continue")){
+                    //recording paused
+                    Log.d("test","Paused");
+                    statusTextView.setText("Recording Paused");
+                    noiseCapture.stopRecording();
+                    wakeLock.release();
+                }
+                else {
+                    //recording continuous
+                    Log.d("test", "Continue");
+                    startNoiseRecording();
+                    wakeLock.acquire();
+                }
+            }
+        });
+
+
+
+        startsoundAllBtn.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View v) {
                 DialogInterface.OnClickListener dialogListener=new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        noiseCapture = new NoiseCapture();
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes Button Clicked
@@ -597,7 +637,6 @@ public class Extras extends Fragment {
 
             }
         });
-
         stopsoundAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -623,7 +662,7 @@ public class Extras extends Fragment {
                                 getActivity().findViewById(R.id.btnsoundStopAll).setEnabled(false);
                                 statusTextView.setText("");
                                 wakeLock.release();
-
+                                //noiseCapture.stopRecording();
                                 date=new Date();
                                 if(((ToggleButton)getActivity().findViewById(R.id.btnsoundPause)).isChecked()) {
                                     ((ToggleButton) getActivity().findViewById(R.id.btnsoundPause)).setChecked(false);
@@ -734,6 +773,7 @@ public class Extras extends Fragment {
      * Start recording the light data
      */
     public void startLightRecordingAll() {
+        //dateobj = new Date();
         folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
         boolean folder_exists = true;
         if (isAnyOptionChecked()) {
@@ -746,16 +786,17 @@ public class Extras extends Fragment {
                 time=date.getTime();
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
-                String subFolderName="DATA_"+timestampStr;
+                //dateobj = new Date();
+                String subFolderName="DATA_"+dftime.format(dateobj);
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 }
                 else {
-                    subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
+                    subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/"+"Date_"+df.format(dateobj)+"/"+ subFolderName+"/"+"Light");
                     if (!subfolder.exists()) {
-                        subfolder_exists = subfolder.mkdir();
+                        subfolder_exists = subfolder.mkdirs();
                     }
                     if (subfolder_exists) {
                         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(false);
@@ -784,6 +825,7 @@ public class Extras extends Fragment {
     }
 
     public void startRecordingAll(){
+        //dateobj = new Date();
         folder= new File(Environment.getExternalStorageDirectory()+"/"+appFolderName);
         boolean folder_exists=true;
 
@@ -797,16 +839,16 @@ public class Extras extends Fragment {
                 time=date.getTime();
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
-
-                String subFolderName="DATA_"+timestampStr;
+               // dateobj = new Date();
+                String subFolderName="DATA_"+dftime.format(dateobj);
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 } else {
-                    subfolder=new File(Environment.getExternalStorageDirectory()+"/"+appFolderName+"/"+subFolderName);
+                    subfolder=new File(Environment.getExternalStorageDirectory()+"/"+appFolderName+"/"+"Date_"+df.format(dateobj)+"/"+subFolderName+"/"+"All");
                     if(!subfolder.exists()){
-                        subfolder_exists=subfolder.mkdir();
+                        subfolder_exists=subfolder.mkdirs();
                     }
                     if(subfolder_exists){
                         getActivity().findViewById(R.id.btnStartAll).setEnabled(false);
@@ -847,12 +889,12 @@ public class Extras extends Fragment {
                             wifiStartRecord();
                     }
                     else{
-                        ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+                        ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.1");
                     }
                 }
 
             }else{
-                ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+                ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.2");
                 //errorTag.setText("Failed to create Folder for application");
             }
 
@@ -928,15 +970,7 @@ public class Extras extends Fragment {
         getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         //lines added
         //mainWifi.startScan();
-
-        t1.scheduleAtFixedRate(tt,0,1000);
-        //doinback();
-
-        //  end
-        wifiStarted=true;
-    }
-    /*private void doinback(){
-        handler.postDelayed(new Runnable() {
+        tt[timerCount] = new TimerTask() {
             @Override
             public void run() {
                 mainWifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
@@ -946,10 +980,14 @@ public class Extras extends Fragment {
                 //receiverWifi = new WifiReceiver();
                 getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                 mainWifi.startScan();
-                doinback();
             }
-        },3000);
-    }*/
+        };
+        t1[timerCount] = new Timer();
+        t1[timerCount].scheduleAtFixedRate(tt[timerCount],0,1000);
+        timerCount++;
+        wifiStarted=true;
+    }
+
     private void gpsStartRecord(){
 
         String gpsFilename=getMode() + "_GPS_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
@@ -1327,7 +1365,7 @@ public class Extras extends Fragment {
                     String timestampFormatted=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date(systemTimeInMilli));
 
                     marker="";
-
+                    /*
                     for(String key: landmark.keySet())
                     {
                         if(landmark.get(key)!=0)
@@ -1335,7 +1373,7 @@ public class Extras extends Fragment {
                             marker+=key+"_"+landmark.get(key)+"+";
                         }
                     }
-
+                    */
                     String lightSensorDetails="\n"+x+","+timestampFormatted+","+marker;
 
                     try{
@@ -1468,7 +1506,7 @@ public class Extras extends Fragment {
         }
         if(wifiStarted){
             try{
-                t1.cancel();
+                t1[timerCount-1].cancel();
                 getActivity().unregisterReceiver(receiverWifi);
 
                 fosWiFi.close();
@@ -1483,7 +1521,7 @@ public class Extras extends Fragment {
         date = new Date();
         time = date.getTime();
         timestamp = new Timestamp(time);
-        String rateFilename= getMode() + "_Rating_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+        String rateFilename= getMode() + "_Rating"+/*timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+*/".txt";
         rateFile=new File(subfolder,rateFilename);
         if (!rateFile.exists()) {
             try {
@@ -1504,8 +1542,18 @@ public class Extras extends Fragment {
         else {
             try {
                 fosrate = new FileOutputStream(rateFile, true);
+                String rate = str + " ";
+                fosrate.write((rate).getBytes());
+                FragmentManager fragmentManager;
+                DialogFragment newFragment = Rating.newInstance(R.string.alert_dialog_rating);
+                fragmentManager = getFragmentManager();
+                newFragment.show(fragmentManager, "dialog");
             }catch (FileNotFoundException ex) {
                 ex.printStackTrace();
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
     }
@@ -1647,16 +1695,16 @@ public class Extras extends Fragment {
 
 
                 case R.id.btnLM13:{
-                    if(frtrn==0){
-                        rBtn.setTextColor(Color.RED);
-                        rImg.setImageResource(R.drawable.btn_overtake1);
-                        frtrn=1;
-                        crtrn++;
-                        landmark.put(bsyStr,crtrn);
+                    if(fbsy==0){
+                        bsyBtn.setTextColor(Color.RED);
+                        bsyImg.setImageResource(R.drawable.btn_busyroad1);
+                        fbsy=1;
+                        cbsy++;
+                        landmark.put(bsyStr,cbsy);
                     }else{
-                        rBtn.setTextColor(Color.BLACK);
-                        rImg.setImageResource(R.drawable.btn_overtake0);
-                        frtrn=0;
+                        bsyBtn.setTextColor(Color.BLACK);
+                        bsyImg.setImageResource(R.drawable.btn_busyroad0);
+                        fbsy=0;
                         landmark.put(bsyStr,0);
                         showDialog("Busy Road");
                     }
@@ -1709,7 +1757,7 @@ public class Extras extends Fragment {
                         nrmlImg.setImageResource(R.drawable.btn_dummy0);
                         fnrml=0;
                         landmark.put(nrmlStr,0);
-                        showDialog("Normal Road");
+                        showDialog("Bus Stop");
                     }
                     break;
                 }

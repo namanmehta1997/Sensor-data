@@ -524,7 +524,7 @@ public class NoiseCapture {
                             Thread thread = new Thread() {
                                 @Override
                                 public void run() {
-                                    Log.v("NOISE", String.valueOf(dbATimeDisplay));
+                                    //Log.v("NOISE", String.valueOf(dbATimeDisplay));
                                     //Logger logger = new Logger();
                                     logger.addRecordToLog(dbATimeDisplay);
 

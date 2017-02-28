@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
-import android.support.v7.internal.widget.AppCompatPopupWindow;
+//import android.support.v7.internal.widget.AppCompatPopupWindow;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;

@@ -32,8 +32,12 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDXtI_4XpA9cJ8ge2rH7iwN8s9cFHVfwSw"/>
 
+<<<<<<< HEAD
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"/>
+=======
+        <activity android:name=".MainActivity" />
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         <activity android:name=".ModeOfTransport">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

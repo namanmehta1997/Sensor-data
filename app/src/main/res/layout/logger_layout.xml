@@ -12,7 +12,10 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
     android:background="@color/background_2"
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     android:orientation="vertical">
 
     <LinearLayout

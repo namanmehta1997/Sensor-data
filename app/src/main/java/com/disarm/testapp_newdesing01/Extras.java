@@ -8,6 +8,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+<<<<<<< HEAD
+=======
+import android.content.pm.ActivityInfo;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.media.MediaRecorder;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -19,11 +23,21 @@ import android.support.annotation.Nullable;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 //import android.support.v4.app.DialogFragment;
+<<<<<<< HEAD
 //import android.support.v7.internal.widget.AppCompatPopupWindow;
+=======
+import android.support.v7.internal.widget.AppCompatPopupWindow;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
+<<<<<<< HEAD
+=======
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +57,10 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+<<<<<<< HEAD
+=======
+import android.widget.ProgressBar;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -64,11 +82,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+<<<<<<< HEAD
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+=======
+import java.util.*;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.content.pm.ActivityInfo.*;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import static com.disarm.testapp_newdesing01.ModeOfTransport.getMode;
 
 
@@ -85,6 +110,7 @@ public class Extras extends Fragment {
     private SensorEventListener accSensorEventListener,laccSensorEventListener,comSensorEventListener,gyrSensorEventListener, lightSensorEventListener;
     PhoneStateListener mSignalListener;
     MediaRecorder mRecorder = null;
+<<<<<<< HEAD
     //WiFi Timer Variables
     private static int timerCount=0;
     private Timer t = new  Timer();
@@ -99,11 +125,40 @@ public class Extras extends Fragment {
     private String bumpbrkStr="Bump with Brake" ,bumpwobrkStr="Bump w/o Brake",potholeStr="PothHole",immdStr="Immediate Brake",slowStr="Slow Brake", uStr="U Turn", lStr="Turn", jupStr="Jerk Up", jdownStr="Jerk Down",nrmlStr="Bus Stop",rghStr="Rough Road",bsyStr="Busy Road";
 
     private String marker="";
+=======
+    Timer t = new  Timer();
+    Timer t1 = new Timer();
+    TimerTask tt = new TimerTask() {
+        @Override
+        public void run() {
+            mainWifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+            if (receiverWifi==null) {
+                receiverWifi = new WifiReceiver();
+            }
+            //receiverWifi = new WifiReceiver();
+            getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+            mainWifi.startScan();
+        }
+    };
+    private final Handler handler = new Handler();
+    private Sensor accSensor,laccSensor,comSensor,gyrSensor, lightSensor;
+
+    private int fbmpbrk=0, fbmpwobrk=0, fpothole=0,fimmd=0,fslow=0,futrn=0,fltrn=0,frtrn=0,fjup=0,fjdown=0, fnrml=0, frgh=0;
+    private int cbmpbrk=0, cbmpwobrk=0, cpothole=0,cimmd=0,cslow=0,cutrn=0,cltrn=0,crtrn=0,cjup=0,cjdown=0, cnrml=0, crgh=0;
+    private String bumpbrkStr="Bump with Brake" ,bumpwobrkStr="Bump w/o Brake",potholeStr="PothHole",immdStr="Immediate Brake",slowStr="Slow Brake", uStr="U Turn", lStr="Turn", jupStr="Jerk Up", jdownStr="Jerk Down",nrmlStr="Normal Road",rghStr="Rough Road",bsyStr="Busy Road";
+
+    private String marker="";
+    public static String subFolderName;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     private Map<String, Integer> landmark =new HashMap<String,Integer>();
 
     private String appFolderName="GPSAndSensorRecorder";
     public static File folder,subfolder;
+<<<<<<< HEAD
     private Timestamp timestamp;
+=======
+    private static Timestamp timestamp;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
     private String timestampStr;
     private Date accStartTime,laccStartTime,comStartTime,gyrStartTime, soundStartTime, accStopTime,laccStopTime,comStopTime,gyrStopTime, lightStartTime;
@@ -114,6 +169,7 @@ public class Extras extends Fragment {
     private WifiReceiver receiverWifi;
 
     TextView errorTextView;
+<<<<<<< HEAD
     TextView detailsTextView,statusTextView;
 
     Button bmpbrkBtn, potholeBtn, bmpwobrkBtn, immdBtn, slowBtn, uBtn, lBtn, rBtn, jupBtn, jdownBtn, nrmlBtn, rghBtn , bsyBtn;
@@ -124,16 +180,30 @@ public class Extras extends Fragment {
 
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
+=======
+
+    Button bmpbrkBtn, potholeBtn, bmpwobrkBtn, immdBtn, slowBtn, uBtn, lBtn, rBtn, jupBtn, jdownBtn, nrmlBtn, rghBtn , bsyBtn;
+    ImageView bmpbrkImg,potholeImg,bmpwobrkImg,immdImg,slowImg,uImg,lImg,rImg,jupImg,jdownImg, nrmlImg, rghImg;
+    private boolean checkACC=true, checkLACC=true, checkGPS=true, checkGYR=true, checkCOM=true, checkGSM=true, checkWiFi=true, checkLGT=true;
+    private boolean lightStarted = false, gpsStarted = false, gsmStarted = false, accStarted = false, laccStarted = false, comStarted = false, gyrStarted = false, wifiStarted = false, folder_exists=true, subfolder_exists=true;
+    //boolean GPS_STARTED=false;
+    PowerManager powerManager;
+    PowerManager.WakeLock wakeLock;
+    ProgressBar lightMeter, soundMeter;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     Logger logger;
 
     private FileOutputStream fosrate;
     public static int rating,rating_final;
     public static File rateFile;
 
+<<<<<<< HEAD
     DateFormat df = new SimpleDateFormat("dd_MM_yy");
     DateFormat dftime = new SimpleDateFormat("HH_mm_ss");
     public static Date dateobj = new Date();
 
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     ////////////Noise Variable
     private float gain;
     String gainString ;
@@ -145,15 +215,67 @@ public class Extras extends Fragment {
     private double timeDisplay;
     private final static int BLOCK_SIZE_FFT = 1764;
     private final static int RECORDER_SAMPLERATE = 44100;
+<<<<<<< HEAD
     private final static int NUMBER_OF_FFT_PER_SECOND = RECORDER_SAMPLERATE / BLOCK_SIZE_FFT;
     NoiseCapture noiseCapture;
 
+=======
+    private final static int NUMBER_OF_FFT_PER_SECOND = RECORDER_SAMPLERATE
+            / BLOCK_SIZE_FFT;
+    NoiseCapture noiseCapture = new NoiseCapture();
+
+    /**
+     * Create a subfolder whenever the fragment is started
+     */
+    public void createFolder() {
+        folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        folder_exists = true;
+            if (!folder.exists()) {
+                folder_exists = folder.mkdir();
+            }
+            if (folder_exists) {
+                subfolder_exists=true;
+                date=new Date();
+                time=date.getTime();
+                timestamp=new Timestamp(time);
+                timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+                subFolderName=  "DATA_" + getMode() +'_' + timestampStr;
+                    subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
+                    if (!subfolder.exists()) {
+                        subfolder_exists = subfolder.mkdir();
+                    }
+                    if (subfolder_exists) {
+                    }
+                    else{
+                        ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+                    }
+
+            }
+            else{
+                ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+            }
+    }
+
+    /**
+     * Return the sub folder name
+     * @return String
+     */
+    public static String getSubFolderName() {
+        return subFolderName;
+    }
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //called only once in the lifetime of fragment. When the fragment is added to the app first.
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         Log.d("Surji","LoggerFrag_OnCreate Has Called");
+=======
+        setHasOptionsMenu(true);
+        Log.d("Surji","LoggerFrag_OnCreate Has Called");
+        createFolder();
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     }
 
     @Nullable
@@ -202,6 +324,116 @@ public class Extras extends Fragment {
         Log.d("Surji","LoggerFrag_OnDetach Has Called");
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        //int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        /*if (id == R.id.action_settings ) {
+            return true;
+        }*/
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.checkGPS:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkGPS=false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkGPS=true;
+                }
+
+                return true;
+            case R.id.checkACC:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkACC=false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkACC=true;
+                }
+
+                return true;
+            case R.id.checkLACC:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkLACC=false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkLACC=true;
+                }
+
+                return true;
+            case R.id.checkGYR:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkGYR = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkGYR=true;
+                }
+
+                return true;
+            case R.id.checkCOM:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkCOM = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkCOM=true;
+                }
+
+                return true;
+            case R.id.checkGSM:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkGSM = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkGSM=true;
+                }
+
+                return true;
+            case R.id.checkWiFi:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkWiFi = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkWiFi=true;
+                }
+
+                return true;
+            case R.id.checkLGT:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    checkLGT = false;
+                }
+                else {
+                    item.setChecked(true);
+                    checkLGT=true;
+                }
+
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     private void startNoiseRecording(){
         try {
             gain = Float.parseFloat(gainString);
@@ -224,8 +456,12 @@ public class Extras extends Fragment {
 
         noiseCapture.precalculateWeightedA();
 
+<<<<<<< HEAD
         noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog);
 
+=======
+        noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog, timestampStr, subfolder, soundMeter);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     }
 
     @Override
@@ -233,16 +469,28 @@ public class Extras extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         errorTextView=(TextView)getActivity().findViewById(R.id.txtError);
+<<<<<<< HEAD
         //detailsTextView=(TextView)getActivity().findViewById(R.id.txtDetails);
         statusTextView=(TextView)getActivity().findViewById(R.id.txtStatus);
 
         initiateLandMarks();
         checkAvailableSensors();
+=======
+
+        initiateLandMarks();
+        checkAvailableSensors();
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         //initiateDetails();
 
         powerManager=(PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
         wakeLock=powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"LoggerWakeLock");
 
+<<<<<<< HEAD
+=======
+        lightMeter = (ProgressBar)getActivity().findViewById(R.id.lightmeter);
+        soundMeter = (ProgressBar)getActivity().findViewById(R.id.soundmeter);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
         bmpbrkBtn=(Button)getActivity().findViewById(R.id.btnLM1);
         potholeBtn=(Button)getActivity().findViewById(R.id.btnLM2);
@@ -258,6 +506,7 @@ public class Extras extends Fragment {
         rghBtn = (Button)getActivity().findViewById(R.id.btnLM12);
         bsyBtn = (Button)getActivity().findViewById(R.id.btnLM13);
 
+<<<<<<< HEAD
         checkACC=(CheckBox)getActivity().findViewById(R.id.checkACC);
         checkLACC=(CheckBox)getActivity().findViewById(R.id.checkLACC);
         checkGYR=(CheckBox)getActivity().findViewById(R.id.checkGYR);
@@ -266,6 +515,16 @@ public class Extras extends Fragment {
         checkGSM=(CheckBox)getActivity().findViewById(R.id.checkGSM);
         checkWiFi=(CheckBox)getActivity().findViewById(R.id.checkWiFi);
         checkLight = (CheckBox)getActivity().findViewById(R.id.checkLGT);
+=======
+        /*checkACC=(MenuItem)getActivity().findViewById(R.id.checkACC);
+        checkLACC=(MenuItem)getActivity().findViewById(R.id.checkLACC);
+        checkGYR=(MenuItem)getActivity().findViewById(R.id.checkGYR);
+        checkCOM=(MenuItem)getActivity().findViewById(R.id.checkCOM);
+        checkGPS=(MenuItem)getActivity().findViewById(R.id.checkGPS);
+        checkGSM=(MenuItem)getActivity().findViewById(R.id.checkGSM);
+        checkWiFi=(MenuItem)getActivity().findViewById(R.id.checkWiFi);
+        checkLGT = (MenuItem)getActivity().findViewById(R.id.checkLGT);*/
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
         bmpbrkImg=(ImageView)getActivity().findViewById(R.id.imgLM1);
         potholeImg=(ImageView)getActivity().findViewById(R.id.imgLM2);
@@ -279,7 +538,10 @@ public class Extras extends Fragment {
         jdownImg=(ImageView)getActivity().findViewById(R.id.imgLM10);
         nrmlImg=(ImageView)getActivity().findViewById(R.id.imgLM11);
         rghImg=(ImageView)getActivity().findViewById(R.id.imgLM12);
+<<<<<<< HEAD
         bsyImg=(ImageView)getActivity().findViewById(R.id.imgLM13);
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
         /*
         checkGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -335,7 +597,10 @@ public class Extras extends Fragment {
                 if(state.equals("Continue")){
                     //recording paused
                     Log.d("test","Paused");
+<<<<<<< HEAD
                     statusTextView.setText("Recording Paused");
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
                     if(gpsStarted){
                         locationManager.removeUpdates(locationListener);
@@ -356,7 +621,11 @@ public class Extras extends Fragment {
                         mTelManager.listen(mSignalListener, PhoneStateListener.LISTEN_NONE);
                     }
                     if(wifiStarted){
+<<<<<<< HEAD
                         t1[timerCount-1].cancel();
+=======
+                        t1.cancel();
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                         getActivity().unregisterReceiver(receiverWifi);
                     }
 
@@ -413,6 +682,7 @@ public class Extras extends Fragment {
                     if(wifiStarted)
                     {
                         getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+<<<<<<< HEAD
                         tt[timerCount] = new TimerTask() {
                             @Override
                             public void run() {
@@ -430,6 +700,10 @@ public class Extras extends Fragment {
                         timerCount++;
                     }
                     statusTextView.setText("Recording Continuing");
+=======
+                        t1.scheduleAtFixedRate(tt,0,1000);
+                    }
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 }
             }
         });
@@ -503,7 +777,10 @@ public class Extras extends Fragment {
 
                 if (state.equals("Continue")) {
                     Log.d("test", "Paused");
+<<<<<<< HEAD
                     statusTextView.setText("Recording Paused");
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
                     if (lightStarted) {
                         lightSensorManager.unregisterListener(lightSensorEventListener, lightSensor);
@@ -525,7 +802,10 @@ public class Extras extends Fragment {
                     lightStartTime = date;
                     if(accStarted)
                         lightSensorManager.registerListener(lightSensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+<<<<<<< HEAD
                     statusTextView.setText("Recording Continuing");
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 }
             }
         });
@@ -537,7 +817,10 @@ public class Extras extends Fragment {
         startlightAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
                 //noiseCapture = new NoiseCapture();
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 DialogInterface.OnClickListener dialogListener=new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -580,6 +863,7 @@ public class Extras extends Fragment {
 
         // For sound applications
         final Button startsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStartAll);
+<<<<<<< HEAD
         final Button stopsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStopAll);
         final Button pauseSoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundPause);
         //logger = new Logger();
@@ -610,19 +894,32 @@ public class Extras extends Fragment {
 
         startsoundAllBtn.setOnClickListener(new View.OnClickListener(){
 
+=======
+
+        final Button stopsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStopAll);
+        //logger = new Logger();
+
+        startsoundAllBtn.setOnClickListener(new View.OnClickListener() {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
             @Override
             public void onClick(View v) {
                 DialogInterface.OnClickListener dialogListener=new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+<<<<<<< HEAD
                         noiseCapture = new NoiseCapture();
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes Button Clicked
                                 getActivity().findViewById(R.id.btnsoundStartAll).setEnabled(false);
                                 getActivity().findViewById(R.id.btnsoundPause).setEnabled(true);
                                 getActivity().findViewById(R.id.btnsoundStopAll).setEnabled(true);
+<<<<<<< HEAD
                                 statusTextView.setText("Recording in Progress");
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                                 wakeLock.acquire();
                                 startNoiseRecording();
 
@@ -637,6 +934,10 @@ public class Extras extends Fragment {
 
             }
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         stopsoundAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -660,9 +961,15 @@ public class Extras extends Fragment {
                                 getActivity().findViewById(R.id.btnsoundStartAll).setEnabled(true);
                                 getActivity().findViewById(R.id.btnsoundPause).setEnabled(false);
                                 getActivity().findViewById(R.id.btnsoundStopAll).setEnabled(false);
+<<<<<<< HEAD
                                 statusTextView.setText("");
                                 wakeLock.release();
                                 //noiseCapture.stopRecording();
+=======
+
+                                wakeLock.release();
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                                 date=new Date();
                                 if(((ToggleButton)getActivity().findViewById(R.id.btnsoundPause)).isChecked()) {
                                     ((ToggleButton) getActivity().findViewById(R.id.btnsoundPause)).setChecked(false);
@@ -761,18 +1068,49 @@ public class Extras extends Fragment {
         }
     }
 
+<<<<<<< HEAD
     private boolean isAnyOptionChecked(){
         if ((checkACC.isChecked() || checkLACC.isChecked() || checkCOM.isChecked() || checkGYR.isChecked() ||checkGPS.isChecked()) ||checkGSM.isChecked() || checkLight.isChecked()){
+=======
+    /*private boolean isAnyOptionChecked(){
+        if ((checkACC.isChecked() || checkLACC.isChecked() || checkCOM.isChecked() || checkGYR.isChecked() ||checkGPS.isChecked()) ||checkGSM.isChecked()){
             return true;
         }else {
             return false;
         }
     }
 
+    private boolean isLightSensorChecked() {
+       if (checkLGT.isChecked())
+           return true;
+        else return false;
+    }*/
+
+    private boolean isAnyOptionChecked(){
+        if (checkACC || checkLACC || checkCOM || checkGYR ||checkGSM){
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+<<<<<<< HEAD
+=======
+    private boolean isLightSensorChecked() {
+        if (checkLGT)
+            return true;
+        else return false;
+    }
+
+
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     /**
      * Start recording the light data
      */
     public void startLightRecordingAll() {
+<<<<<<< HEAD
         //dateobj = new Date();
         folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
         boolean folder_exists = true;
@@ -782,10 +1120,18 @@ public class Extras extends Fragment {
             }
             if (folder_exists) {
                 boolean subfolder_exists=true;
+=======
+        //folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+        //boolean folder_exists = true;
+        if (isLightSensorChecked()) {
+            if (folder_exists) {
+                /*boolean subfolder_exists=true;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 date=new Date();
                 time=date.getTime();
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+<<<<<<< HEAD
                 //dateobj = new Date();
                 String subFolderName="DATA_"+dftime.format(dateobj);
 
@@ -798,14 +1144,30 @@ public class Extras extends Fragment {
                     if (!subfolder.exists()) {
                         subfolder_exists = subfolder.mkdirs();
                     }
+=======
+                String subFolderName=getMode() + "_DATA_"+timestampStr;*/
+
+                locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                if(checkGPS && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
+                }
+                else {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                     if (subfolder_exists) {
                         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnlightPause).setEnabled(true);
                         getActivity().findViewById(R.id.btnlightStopAll).setEnabled(true);
+<<<<<<< HEAD
                         statusTextView.setText("Recording in Progress");
                         wakeLock.acquire();
 
                         if (checkLight.isChecked()) {
+=======
+
+                        wakeLock.acquire();
+
+                        if (checkLGT) {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                             lightStartRecord();
                         }
                     }
@@ -819,12 +1181,17 @@ public class Extras extends Fragment {
             }
         }
         else{
+<<<<<<< HEAD
             ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check at least one Option to Record");
+=======
+            ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check Light Option to Record");
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         }
 
     }
 
     public void startRecordingAll(){
+<<<<<<< HEAD
         //dateobj = new Date();
         folder= new File(Environment.getExternalStorageDirectory()+"/"+appFolderName);
         boolean folder_exists=true;
@@ -835,10 +1202,19 @@ public class Extras extends Fragment {
             }
             if(folder_exists){
                 boolean subfolder_exists=true;
+=======
+        /*folder= new File(Environment.getExternalStorageDirectory()+"/"+appFolderName);
+        boolean folder_exists=true;*/
+
+        if(isAnyOptionChecked()){
+            if(folder_exists){
+                /*boolean subfolder_exists=true;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 date=new Date();
                 time=date.getTime();
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+<<<<<<< HEAD
                // dateobj = new Date();
                 String subFolderName="DATA_"+dftime.format(dateobj);
 
@@ -850,35 +1226,65 @@ public class Extras extends Fragment {
                     if(!subfolder.exists()){
                         subfolder_exists=subfolder.mkdirs();
                     }
+=======
+
+                String subFolderName=getMode()+"_DATA_"+timestampStr;*/
+
+                locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                if(checkGPS && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
+                } else {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                     if(subfolder_exists){
                         getActivity().findViewById(R.id.btnStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnPause).setEnabled(true);
                         getActivity().findViewById(R.id.btnStopAll).setEnabled(true);
+<<<<<<< HEAD
                         statusTextView.setText("Recording in Progress");
+=======
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                         wakeLock.acquire();
                         //Getting GPS Data and writing into a file
                         //getActivity().findViewById(R.id.btnGpsStart).setEnabled(false);
 
+<<<<<<< HEAD
                         if(checkGPS.isChecked())
+=======
+                        if(checkGPS)
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                             gpsStartRecord();
 
                         //Getting AcceleroMeter Data and writing to file
                         //getActivity().findViewById(R.id.btnAccStart).setEnabled(false);
+<<<<<<< HEAD
                         if(checkACC.isChecked())
+=======
+                        if(checkACC)
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                             accStartRecord();
 
                         //Getting Linear AcceleroMeter Data and writing to file
                         //getActivity().findViewById(R.id.btnLaccStart).setEnabled(false);
+<<<<<<< HEAD
                         if(checkLACC.isChecked())
+=======
+                        if(checkLACC)
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                             laccStartRecord();
 
                         //Getting Compass Data and writing to file
                         //getActivity().findViewById(R.id.btnComStart).setEnabled(false);
+<<<<<<< HEAD
                         if(checkCOM.isChecked())
+=======
+                        if(checkCOM)
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                             comStartRecord();
 
                         //Getting GYROSCOPE data and writing it to file
                         //getActivity().findViewById(R.id.btnGyrStart).setEnabled(false);
+<<<<<<< HEAD
                         if(checkGYR.isChecked())
                             gyrStartRecord();
 
@@ -890,10 +1296,24 @@ public class Extras extends Fragment {
                     }
                     else{
                         ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.1");
+=======
+                        if(checkGYR)
+                            gyrStartRecord();
+
+                        if(checkGSM)
+                            gsmStartRecord();
+
+                        if(checkWiFi)
+                            wifiStartRecord();
+                    }
+                    else{
+                        ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                     }
                 }
 
             }else{
+<<<<<<< HEAD
                 ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.2");
                 //errorTag.setText("Failed to create Folder for application");
             }
@@ -906,6 +1326,20 @@ public class Extras extends Fragment {
 
     private void gsmStartRecord() {
         String gsmFilename= getMode() + "_GSM_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+                ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+                //errorTag.setText("Failed to create Folder for application");
+            }
+
+        }
+        else{
+            ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check at least one Option to Record");
+        }
+    }
+
+    private void gsmStartRecord() {
+        String gsmFilename= "GSM_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         final File gsmFile=new File(subfolder,gsmFilename);
 
         mTelManager=(TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
@@ -956,7 +1390,11 @@ public class Extras extends Fragment {
         time=date.getTime();
         timestamp=new Timestamp(time);
         timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+<<<<<<< HEAD
         wifiFileName=getMode() + "_WiFi_"+timestampStr+".txt";
+=======
+        wifiFileName="WiFi_"+timestampStr+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         File WifiLog =new File(subfolder,wifiFileName);
         try {
             fosWiFi=new FileOutputStream(WifiLog);
@@ -970,7 +1408,19 @@ public class Extras extends Fragment {
         getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         //lines added
         //mainWifi.startScan();
+<<<<<<< HEAD
         tt[timerCount] = new TimerTask() {
+=======
+
+        t1.scheduleAtFixedRate(tt,0,1000);
+        //doinback();
+
+        //  end
+        wifiStarted=true;
+    }
+    /*private void doinback(){
+        handler.postDelayed(new Runnable() {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
             @Override
             public void run() {
                 mainWifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
@@ -980,6 +1430,7 @@ public class Extras extends Fragment {
                 //receiverWifi = new WifiReceiver();
                 getActivity().registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                 mainWifi.startScan();
+<<<<<<< HEAD
             }
         };
         t1[timerCount] = new Timer();
@@ -991,6 +1442,15 @@ public class Extras extends Fragment {
     private void gpsStartRecord(){
 
         String gpsFilename=getMode() + "_GPS_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+                doinback();
+            }
+        },3000);
+    }*/
+    private void gpsStartRecord(){
+
+        String gpsFilename="GPS_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         File gpsFile=new File(subfolder,gpsFilename);
         //locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -1068,7 +1528,11 @@ public class Extras extends Fragment {
     }
 
     private void accStartRecord(){
+<<<<<<< HEAD
         String accFilename=getMode() + "_ACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+        String accFilename="ACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         final File accFile=new File(subfolder,accFilename);
 
         try {
@@ -1127,7 +1591,11 @@ public class Extras extends Fragment {
     }
 
     private void laccStartRecord(){
+<<<<<<< HEAD
         String laccFilename=getMode() + "_LACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+        String laccFilename="LACC_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         final File laccFile=new File(subfolder,laccFilename);
 
         try {
@@ -1195,7 +1663,11 @@ public class Extras extends Fragment {
     }
 
     private void comStartRecord(){
+<<<<<<< HEAD
         String comFilename=getMode() + "_COM"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+        String comFilename="COM_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         final File comFile=new File(subfolder,comFilename);
 
         try {
@@ -1266,7 +1738,11 @@ public class Extras extends Fragment {
     }
 
     private void gyrStartRecord(){
+<<<<<<< HEAD
         String gyrFilename=getMode() + "_GYR"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+        String gyrFilename="GYR_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         final File gyrFile=new File(subfolder,gyrFilename);
         try {
             fosGYR=new FileOutputStream(gyrFile);
@@ -1338,7 +1814,11 @@ public class Extras extends Fragment {
      * Light record
      */
     private void lightStartRecord() {
+<<<<<<< HEAD
         String lgtFilename=getMode() + "_LIGHT"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+=======
+        String lgtFilename="LIGHT_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         final File gyrFile=new File(subfolder,lgtFilename);
         try {
             fosLGT=new FileOutputStream(gyrFile);
@@ -1365,7 +1845,11 @@ public class Extras extends Fragment {
                     String timestampFormatted=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date(systemTimeInMilli));
 
                     marker="";
+<<<<<<< HEAD
                     /*
+=======
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                     for(String key: landmark.keySet())
                     {
                         if(landmark.get(key)!=0)
@@ -1373,9 +1857,15 @@ public class Extras extends Fragment {
                             marker+=key+"_"+landmark.get(key)+"+";
                         }
                     }
+<<<<<<< HEAD
                     */
                     String lightSensorDetails="\n"+x+","+timestampFormatted+","+marker;
 
+=======
+
+                    String lightSensorDetails="\n"+x+","+timestampFormatted+","+marker;
+                    lightMeter.setProgress((int)event.values[0]);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                     try{
 
                         fosLGT.write(lightSensorDetails.getBytes());
@@ -1406,7 +1896,11 @@ public class Extras extends Fragment {
         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(true);
         getActivity().findViewById(R.id.btnlightPause).setEnabled(false);
         getActivity().findViewById(R.id.btnlightStopAll).setEnabled(false);
+<<<<<<< HEAD
         statusTextView.setText("");
+=======
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         wakeLock.release();
 
         date=new Date();
@@ -1433,7 +1927,11 @@ public class Extras extends Fragment {
         getActivity().findViewById(R.id.btnStartAll).setEnabled(true);
         getActivity().findViewById(R.id.btnPause).setEnabled(false);
         getActivity().findViewById(R.id.btnStopAll).setEnabled(false);
+<<<<<<< HEAD
         statusTextView.setText("");
+=======
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         wakeLock.release();
 
         initiateLandMarks();
@@ -1506,7 +2004,11 @@ public class Extras extends Fragment {
         }
         if(wifiStarted){
             try{
+<<<<<<< HEAD
                 t1[timerCount-1].cancel();
+=======
+                t1.cancel();
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 getActivity().unregisterReceiver(receiverWifi);
 
                 fosWiFi.close();
@@ -1521,7 +2023,11 @@ public class Extras extends Fragment {
         date = new Date();
         time = date.getTime();
         timestamp = new Timestamp(time);
+<<<<<<< HEAD
         String rateFilename= getMode() + "_Rating"+/*timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+*/".txt";
+=======
+        String rateFilename= getMode() + "_Rating_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         rateFile=new File(subfolder,rateFilename);
         if (!rateFile.exists()) {
             try {
@@ -1542,6 +2048,7 @@ public class Extras extends Fragment {
         else {
             try {
                 fosrate = new FileOutputStream(rateFile, true);
+<<<<<<< HEAD
                 String rate = str + " ";
                 fosrate.write((rate).getBytes());
                 FragmentManager fragmentManager;
@@ -1555,6 +2062,11 @@ public class Extras extends Fragment {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+=======
+            }catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         }
     }
 
@@ -1695,6 +2207,7 @@ public class Extras extends Fragment {
 
 
                 case R.id.btnLM13:{
+<<<<<<< HEAD
                     if(fbsy==0){
                         bsyBtn.setTextColor(Color.RED);
                         bsyImg.setImageResource(R.drawable.btn_busyroad1);
@@ -1705,6 +2218,18 @@ public class Extras extends Fragment {
                         bsyBtn.setTextColor(Color.BLACK);
                         bsyImg.setImageResource(R.drawable.btn_busyroad0);
                         fbsy=0;
+=======
+                    if(frtrn==0){
+                        rBtn.setTextColor(Color.RED);
+                        rImg.setImageResource(R.drawable.btn_overtake1);
+                        frtrn=1;
+                        crtrn++;
+                        landmark.put(bsyStr,crtrn);
+                    }else{
+                        rBtn.setTextColor(Color.BLACK);
+                        rImg.setImageResource(R.drawable.btn_overtake0);
+                        frtrn=0;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                         landmark.put(bsyStr,0);
                         showDialog("Busy Road");
                     }
@@ -1757,7 +2282,11 @@ public class Extras extends Fragment {
                         nrmlImg.setImageResource(R.drawable.btn_dummy0);
                         fnrml=0;
                         landmark.put(nrmlStr,0);
+<<<<<<< HEAD
                         showDialog("Bus Stop");
+=======
+                        showDialog("Normal Road");
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                     }
                     break;
                 }

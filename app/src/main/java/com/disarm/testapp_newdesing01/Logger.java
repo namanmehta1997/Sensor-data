@@ -36,6 +36,7 @@ public class Logger {
     private String timestampStr;
     private Date date;
     private Long time;
+<<<<<<< HEAD
 
     private LocationManager locationManager;
     private DateFormat df1 = new SimpleDateFormat("dd_MM_yy");
@@ -47,6 +48,20 @@ public class Logger {
         //String date = df.format(Calendar.getInstance().getTime());
         filename += "_" + date;
         folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+=======
+    private String subfolderName;
+    private LocationManager locationManager;
+
+
+    public Logger(String timestampStr, File subfolder) {
+        this.timestampStr = timestampStr;
+        this.subfolder = subfolder;
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+        //String date = df.format(Calendar.getInstance().getTime());
+        filename += "_" + date;
+        subfolderName = Extras.getSubFolderName();
+        /*folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         boolean folder_exists = true;
         if (!folder.exists()) {
             folder_exists = folder.mkdir();
@@ -54,6 +69,7 @@ public class Logger {
 
         if (folder_exists) {
             boolean subfolder_exists = true;
+<<<<<<< HEAD
             date = new Date();
             time = date.getTime();
             timestamp = new Timestamp(time);
@@ -72,6 +88,25 @@ public class Logger {
     public void addRecordToLog(double message) {
         String lgtFilename=getMode()+"_SOUND_"+timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')+".txt";
         final File gyrFile=new File(subfolder,lgtFilename);
+=======
+            //this.timestampStr = timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+            String subFolderName = "DATA_" + getMode() +'_' + this.timestampStr;
+
+            //else {
+            subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
+            if (!subfolder.exists()) {
+                subfolder_exists = subfolder.mkdir();
+            }
+        }*/
+    }
+
+    public void addRecordToLog(double message) {
+        date=new Date();
+        time=date.getTime();
+        timestamp=new Timestamp(time);
+        String lgtFilename="SOUND_"+this.timestampStr+".txt";
+        final File gyrFile=new File(this.subfolder,lgtFilename);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
         if (!gyrFile.exists())  {
             try  {
@@ -89,7 +124,12 @@ public class Logger {
 
             //BufferedWriter for performance, true to set append to file flag
             BufferedWriter buf = new BufferedWriter(new FileWriter(gyrFile, true));
+<<<<<<< HEAD
             buf.write(timestampFormatted + ", " + message);
+=======
+            buf.write("time, #x");
+            buf.write(timestampFormatted + ", " + message +"\n");
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
             buf.newLine();
             buf.flush();
             buf.close();

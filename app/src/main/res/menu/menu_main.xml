@@ -1,6 +1,92 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+<<<<<<< HEAD
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+=======
+    <group>
+    <item
+        android:title="Sensors in use"
+        android:orderInCategory="100"
+        android:id="@+id/sensors_usage"
+        android:visible="true"
+        android:enabled="true"
+        android:checkable="false"
+        app:showAsAction="always"
+        android:icon="@android:drawable/arrow_down_float" >
+    <menu>
+        <item
+            android:orderInCategory="100" app:showAsAction="never"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:title="GPS Location"
+            android:checked="true"
+            android:id="@+id/checkGPS" />
+        <item
+            android:title="Accelerometer"
+            android:orderInCategory="101"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkACC" />
+        <item
+            android:title="Linear A. Meter"
+            android:orderInCategory="102"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkLACC" />
+        <item
+            android:title="Gyroscope"
+            android:orderInCategory="103"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkGYR" />
+        <item
+            android:title="Compass"
+            android:orderInCategory="104"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkCOM" />
+        <item
+            android:title="GSM"
+            android:orderInCategory="105"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkGSM" />
+        <item
+            android:title="WiFi"
+            android:orderInCategory="106"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkWiFi" />
+        <item
+            android:title="Light"
+            android:orderInCategory="107"
+            android:visible="true"
+            android:enabled="true"
+            android:checkable="true"
+            android:checked="true"
+            android:id="@+id/checkLGT" />
+    </menu>
+        </item>
+    </group>
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="101" app:showAsAction="never"
+        android:visible="true"
+        android:enabled="true" />
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 </menu>

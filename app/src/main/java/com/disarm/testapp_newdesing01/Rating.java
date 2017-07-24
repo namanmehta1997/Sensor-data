@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.disarm.testapp_newdesing01.Extras.subfolder;
@@ -75,7 +76,10 @@ public class Rating extends DialogFragment  {
 
                                 try{
                                     fosrate=new FileOutputStream(Extras.rateFile, true);
-                                    String rate = Extras.rating_final + "\n";
+                                    long systemTimeInMilli=(new Date()).getTime();
+                                    String timestampFormatted=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date(systemTimeInMilli));
+                                    fosrate=new FileOutputStream(Extras.rateFile, true);
+                                    String rate =" , "+ Extras.rating_final +" , "+ timestampFormatted+" , " + "\n";
                                     fosrate.write((rate).getBytes());
                                 }catch (FileNotFoundException e2) {
                                     e2.printStackTrace();

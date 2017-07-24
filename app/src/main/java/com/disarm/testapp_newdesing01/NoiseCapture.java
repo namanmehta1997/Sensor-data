@@ -4,7 +4,14 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
+<<<<<<< HEAD
 
+=======
+import android.widget.ProgressBar;
+
+import java.io.File;
+import java.sql.Timestamp;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import java.util.Date;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
@@ -23,7 +30,11 @@ public class NoiseCapture {
 
     // check for level
     String levelToShow;
+<<<<<<< HEAD
     Logger logger = new Logger();
+=======
+    Logger logger;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     // Running Leq
     double linearFftAGlobalRunning = 0;
     private long fftCount = 0;
@@ -88,6 +99,11 @@ public class NoiseCapture {
     private double actualFreq;
     private float gain;
 
+<<<<<<< HEAD
+=======
+    ProgressBar soundMeter;
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
     public void precalculateWeightedA() {
         for (int i = 0; i < BLOCK_SIZE_FFT; i++) {
@@ -109,7 +125,11 @@ public class NoiseCapture {
             weightedA[i] = weightFormula;
         }
     }
+<<<<<<< HEAD
     public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog) {
+=======
+    public void startRecording(final float gain, final int finalCountTimeDisplay, final int finalCountTimeLog, final String timestampStr, final File subfolder, final ProgressBar soundMeter) {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -524,10 +544,17 @@ public class NoiseCapture {
                             Thread thread = new Thread() {
                                 @Override
                                 public void run() {
+<<<<<<< HEAD
                                     //Log.v("NOISE", String.valueOf(dbATimeDisplay));
                                     //Logger logger = new Logger();
                                     logger.addRecordToLog(dbATimeDisplay);
                                     Log.i("DB",dbATimeDisplay+"");
+=======
+                                    Log.v("NOISE", String.valueOf(dbATimeDisplay));
+                                    soundMeter.setProgress((int)dbATimeDisplay);
+                                    logger = new Logger(timestampStr, subfolder);
+                                    logger.addRecordToLog(dbATimeDisplay);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
                                 }
                             };

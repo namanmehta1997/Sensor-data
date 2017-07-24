@@ -9,13 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="40dp"
+<<<<<<< HEAD
         android:background="@color/list_background1"
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         android:id="@android:id/list"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Empty"
+<<<<<<< HEAD
         android:background="@color/list_background1"
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         android:id="@android:id/empty"/>
 </LinearLayout>

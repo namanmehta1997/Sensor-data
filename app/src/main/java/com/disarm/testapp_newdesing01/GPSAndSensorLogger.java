@@ -16,7 +16,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+<<<<<<< HEAD
 //import android.support.v7.internal.widget.AppCompatPopupWindow;
+=======
+import android.support.v7.internal.widget.AppCompatPopupWindow;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -58,6 +62,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+<<<<<<< HEAD
+=======
+import static com.disarm.testapp_newdesing01.ModeOfTransport.getMode;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
 
 /**
@@ -114,6 +122,29 @@ public class GPSAndSensorLogger extends Fragment {
         //called only once in the lifetime of fragment. When the fragment is added to the app first.
         super.onCreate(savedInstanceState);
         Log.d("Surji","LoggerFrag_OnCreate Has Called");
+<<<<<<< HEAD
+=======
+
+        boolean folder_exists = false;
+        folder = new File(Environment.getExternalStorageDirectory()+"/"+appFolderName);
+        if(!folder.exists()) {
+            folder_exists = folder.mkdir();
+
+        }
+        if(folder_exists) {
+            boolean subfolder_exists = true;
+            date=new Date();
+            time=date.getTime();
+            timestamp=new Timestamp(time);
+            timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+
+            String subFolderName= getMode() + "_DATA_"+timestampStr;
+            subfolder=new File(Environment.getExternalStorageDirectory()+"/"+appFolderName+"/"+subFolderName);
+            if(!subfolder.exists()) {
+                subfolder_exists=subfolder.mkdir();
+            }
+        }
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     }
 
     @Nullable
@@ -440,7 +471,11 @@ public class GPSAndSensorLogger extends Fragment {
         final Button startlightAllBtn=(Button)getActivity().findViewById(R.id.btnlightStartAll);
 
         final Button stoplightAllBtn=(Button)getActivity().findViewById(R.id.btnlightStopAll);
+<<<<<<< HEAD
         logger = new Logger();
+=======
+        logger = new Logger(timestampStr, subfolder);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         startlightAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -488,7 +523,11 @@ public class GPSAndSensorLogger extends Fragment {
         final Button startsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStartAll);
 
         final Button stopsoundAllBtn=(Button)getActivity().findViewById(R.id.btnsoundStopAll);
+<<<<<<< HEAD
         logger = new Logger();
+=======
+        logger = new Logger(timestampStr, subfolder);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
         startsoundAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -690,6 +729,7 @@ public class GPSAndSensorLogger extends Fragment {
         folder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName);
         boolean folder_exists = true;
         if (isAnyOptionChecked()) {
+<<<<<<< HEAD
             if (!folder.exists()) {
                 folder_exists = folder.mkdir();
             }
@@ -700,17 +740,37 @@ public class GPSAndSensorLogger extends Fragment {
                 timestamp=new Timestamp(time);
                 timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
                 String subFolderName="DATA_"+timestampStr;
+=======
+            /*if (!folder.exists()) {
+                folder_exists = folder.mkdir();
+            }*/
+            //if (folder_exists) {
+                //boolean subfolder_exists=true;
+                /*date=new Date();
+                time=date.getTime();
+                timestamp=new Timestamp(time);
+                timestampStr=timestamp.toString().replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_');
+                String subFolderName="DATA_"+timestampStr;*/
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
                 locationManager =(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(checkGPS.isChecked() && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     ShowMessage.ShowMessage(getActivity(),"Warning..!","Your GPS is disabled. Please Enable GPS and try again.");
                 }
                 else {
+<<<<<<< HEAD
                     subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
                     if (!subfolder.exists()) {
                         subfolder_exists = subfolder.mkdir();
                     }
                     if (subfolder_exists) {
+=======
+                    //subfolder = new File(Environment.getExternalStorageDirectory() + "/" + appFolderName + "/" + subFolderName);
+                    /*if (!subfolder.exists()) {
+                        subfolder_exists = subfolder.mkdir();
+                    }*/
+                   // if (subfolder_exists) {
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                         getActivity().findViewById(R.id.btnlightStartAll).setEnabled(false);
                         getActivity().findViewById(R.id.btnlightPause).setEnabled(true);
                         getActivity().findViewById(R.id.btnlightStopAll).setEnabled(true);
@@ -720,6 +780,7 @@ public class GPSAndSensorLogger extends Fragment {
                         if (checkLight.isChecked()) {
                             lightStartRecord();
                         }
+<<<<<<< HEAD
                     }
                     else{
                         ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
@@ -729,6 +790,17 @@ public class GPSAndSensorLogger extends Fragment {
             else{
                 ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
             }
+=======
+                   // }
+                    /*else{
+                        ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+                    }*/
+                }
+            //}
+            /*else{
+                ShowMessage.ShowMessage(getActivity(),"Failed..!","Failed to create Folder for Application.\nPlease retry.");
+            }*/
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         }
         else{
             ShowMessage.ShowMessage(getActivity(),"Caution..!","Please Check at least one Option to Record");

@@ -3,21 +3,35 @@ package com.disarm.testapp_newdesing01;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+<<<<<<< HEAD
 import android.graphics.Color;
 import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Layout;
+=======
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+<<<<<<< HEAD
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.MapFragment;
+=======
+import android.widget.EditText;
+import android.widget.TextView;
+
+import static android.content.pm.ActivityInfo.*;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
 
 public class MainActivity extends ActionBarActivity implements SelectItemFragment.OnFragmentInteractionListener {
@@ -25,17 +39,29 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
     FragmentManager fragmentManager=getFragmentManager();
     Fragment loggerFragment=new GPSAndSensorLogger();
     Fragment busfinderFragment=new BusFinder();
+<<<<<<< HEAD
     Fragment extrasFragment=new Extras();
+=======
+    Fragment extrasFragment;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
     TextView loggerTxtView,busfinderTxtView,extrasTxtView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.activity_main);
         //setContentView(R.layout.extras_layout);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+=======
+        setRequestedOrientation (SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.extras_layout);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        extrasFragment=new Extras();
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         loggerTxtView=(TextView)findViewById(R.id.section01);
         busfinderTxtView=(TextView)findViewById(R.id.section02);
         extrasTxtView=(TextView)findViewById(R.id.section03);
@@ -66,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+<<<<<<< HEAD
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -73,6 +100,67 @@ public class MainActivity extends ActionBarActivity implements SelectItemFragmen
             return true;
         }
 
+=======
+        //int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (item.getItemId() == R.id.action_settings ) {
+            return true;
+        }
+            /*switch (item.getItemId()) {
+                case R.id.action_settings:
+                    return true;
+                case R.id.checkGPS:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkACC:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkLACC:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkGYR:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkCOM:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkGSM:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkWiFi:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                case R.id.checkLGT:
+                    if (item.isChecked())
+                        item.setChecked(false);
+                    else item.setChecked(true);
+
+                    return true;
+                default: return super.onOptionsItemSelected(item);
+            }*/
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         return super.onOptionsItemSelected(item);
     }
 

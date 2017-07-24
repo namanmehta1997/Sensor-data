@@ -4,12 +4,24 @@ package com.disarm.testapp_newdesing01;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< HEAD
+=======
+import android.os.Environment;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+<<<<<<< HEAD
+=======
+import android.widget.Toast;
+
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
 
 /**
  * Created by ajalan on 20/12/16.
@@ -22,6 +34,15 @@ public class ModeOfTransport extends Activity{
     public static String mode="";
     private TextView show;
     private EditText other_mode;
+<<<<<<< HEAD
+=======
+    private String appFolderName="GPSAndSensorRecorder", timestampStr;
+    private File folder, subfolder;
+    private Date date;
+    private Long time;
+    private Timestamp timestamp;
+
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +53,17 @@ public class ModeOfTransport extends Activity{
         show.setText("Select a mode of transport:");
         other_mode = (EditText) findViewById(R.id.editText);
         other_mode.setEnabled(false);
+<<<<<<< HEAD
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+=======
+        submit.setEnabled(false);
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                submit.setEnabled(true);
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
                 RadioButton others = (RadioButton) findViewById(R.id.rb_others);
                 RadioButton checked= (RadioButton) findViewById(checkedId);
                 if(others == checked){
@@ -42,8 +71,11 @@ public class ModeOfTransport extends Activity{
                 }
             }
         });
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1b607c53e258401a1c5a8684aefa475a0e1cd6d6
         OnSubmitClick();
     }
     public void OnSubmitClick() {

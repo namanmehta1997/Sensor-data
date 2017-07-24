@@ -527,6 +527,7 @@ public class NoiseCapture {
                                     //Log.v("NOISE", String.valueOf(dbATimeDisplay));
                                     //Logger logger = new Logger();
                                     logger.addRecordToLog(dbATimeDisplay);
+                                    Log.i("DB",dbATimeDisplay+"");
 
                                 }
                             };

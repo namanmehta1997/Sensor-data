@@ -19,7 +19,7 @@ import android.support.annotation.Nullable;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 //import android.support.v4.app.DialogFragment;
-import android.support.v7.internal.widget.AppCompatPopupWindow;
+//import android.support.v7.internal.widget.AppCompatPopupWindow;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -145,8 +145,7 @@ public class Extras extends Fragment {
     private double timeDisplay;
     private final static int BLOCK_SIZE_FFT = 1764;
     private final static int RECORDER_SAMPLERATE = 44100;
-    private final static int NUMBER_OF_FFT_PER_SECOND = RECORDER_SAMPLERATE
-            / BLOCK_SIZE_FFT;
+    private final static int NUMBER_OF_FFT_PER_SECOND = RECORDER_SAMPLERATE / BLOCK_SIZE_FFT;
     NoiseCapture noiseCapture;
 
 
@@ -226,6 +225,7 @@ public class Extras extends Fragment {
         noiseCapture.precalculateWeightedA();
 
         noiseCapture.startRecording((Float) gain, (Integer) finalCountTimeDisplay, (Integer) finalCountTimeLog);
+
     }
 
     @Override
